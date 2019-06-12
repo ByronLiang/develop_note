@@ -3,15 +3,12 @@
 - 写一下这条SQL的对应Mongo Query：
 
 ``` SQL
-
 SELECT * FROM users WHERE name!="kingmax" and name!="soul"
-
 ```
 
 - Answer :
 
 ```php
-
 $db->users->find(['name' => ['$nin' => ['kingmax', 'soul’]]]);
 ```
 
@@ -19,12 +16,12 @@ $db->users->find(['name' => ['$nin' => ['kingmax', 'soul’]]]);
 
 - Answer：
 
-`(\d+\.?\d+)` 提前小数
+`(\d+\.?\d+)` 提取小数
 
 `|` 条件分隔符；可以在美元符号前与后进行相关匹配
 
 ```php
+preg_match('/[\$|美元](\d+\.?\d+)|(\d+\.?\d+)[\$|美元]/', '美元200', $money);
 
-preg_match('/\$(\d+\.?\d+)|(\d+)\$/', '@37.3', $a);
-
+echo last($money);
 ```
