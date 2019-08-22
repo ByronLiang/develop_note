@@ -1,4 +1,8 @@
 # from BasicClass import *
-from BasicClass import User
+# from BasicClass import User
+from BasicClass import Book
 
-print(User.getName())
+
+b = Book.Book('php')
+b.add_version('7.0')
+print(b.version)
