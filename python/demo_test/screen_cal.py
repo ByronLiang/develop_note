@@ -1,3 +1,6 @@
+import random
+import string
+
 # @property and @property.setter
 class Screen(object):
 	@property	
@@ -27,3 +30,7 @@ s.width = 1024
 # @height.setter
 s.height = 768
 print('resolution =', s.resolution)
+
+# create random string in define length (ex: 32)
+random_txt = ''.join(random.sample(string.ascii_letters + string.digits, 32))
+print(random_txt)
