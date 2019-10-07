@@ -29,7 +29,12 @@ class Gender(Enum):
 	Male='1'
 	Female='2'
 	wait_send = 'wait_send'
-for x in Gender:
-	print(x.name, '----', x.value, '---', x)
-	pass		
+
+# for x in Gender:
+# 	print(x.name, '----', x.value, '---', x)
+# 	pass		
 # print(Gender['wait_send'].value)
+
+f = lambda x,y: x + y
+print(list(range(1, 20)))
+# print(f(, range(1, 20)))
