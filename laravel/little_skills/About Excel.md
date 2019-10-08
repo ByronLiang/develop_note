@@ -9,3 +9,9 @@ if (is_numeric($val)) {
     $val = $val.'\t';
 }
 ```
+
+- Laravel Excel包的处理方案
+
+对指定的列进行格式设定，判断其属于数字数据结构，则使用内置的`DataType`进行转换处理
+
+参考：[Custom Formatting Values](https://docs.laravel-excel.com/3.1/exports/custom-formatting-values.html)
