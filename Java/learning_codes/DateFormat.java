@@ -16,13 +16,20 @@ public class DateFormat {
         System.out.println("Calendar获得的时间 星期数据: "+week);
         long today = calendar.getTimeInMillis();
         calendar.set(
-            Integer.parseInt(date_list[0]), 
-            (Integer.parseInt(date_list[1]) - 1), 
+            Integer.parseInt(date_list[0]),
+            (Integer.parseInt(date_list[1]) - 1),
             Integer.parseInt(date_list[2])
         );
         long target = calendar.getTimeInMillis();
         System.out.println("Calendar获得的时间目标: "+target);
         long days=(target-today) / (1000 * 60 * 60 * 24);
         System.out.println("相距 "+days);
+        Calendar clock=Calendar.getInstance();
+        clock.set(Calendar.HOUR_OF_DAY, 0);
+        clock.set(Calendar.SECOND, 0);
+        clock.set(Calendar.MINUTE, 0);
+        clock.set(Calendar.MILLISECOND, 0);
+        long clockData = (clock.getTimeInMillis() / 1000);
+        System.out.println("clock: "+clockData);
     }
 }
