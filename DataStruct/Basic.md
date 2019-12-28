@@ -20,4 +20,21 @@
 
 #### 链表相关补充
 
-- 循环链表: 最后一个结点的指针指向头节点，整个链表形成一个环
+- 循环链表: 最后一个结点的指针指向头节点，整个链表形成一个环; 
+
+- 检测环形链表方法：通过使用快慢指针遍历链表，当快慢指针指向相关节点，则说明属于循环链表
+
+```php
+$slow = $this->list->head->next;
+$fast = $this->list->head->next;
+
+while ($fast != null && $fast->next != null) {
+    $fast = $fast->next->next;
+    $slow = $slow->next;
+
+    // 如果慢指针跟快指针相遇了说明有环 解释在上面的链接中
+    if ($slow === $fast) {
+        return true;
+    }
+}
+```
