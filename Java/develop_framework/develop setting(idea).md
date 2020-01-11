@@ -15,6 +15,10 @@
 
 - lombok插件注释启用
 
+启用注释:
+
+`Build, Execution, Deployment -> Compiler -> Annotation Process`
+
 `勾选 Enable annotation processing`
 
 - 安装相关插件：
@@ -24,3 +28,17 @@ Lombok Plugin
 Relative Line Numbers
 RestfulToolkit
 GsonFormat
+
+## 基本使用操作
+
+### 导入新项目
+
+使用`open`
+
+### 引入新包/变更关联库
+
+在`Gradle`里进行刷新, 重新拉取包的配置
+
+### 控制引入包为*显示配置
+
+`Code Style -> Java -> Class count to use import with *` 配置相关数量
