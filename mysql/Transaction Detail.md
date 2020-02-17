@@ -45,3 +45,10 @@
 - 查询: `SELECT @@tx_isolation`
 - 设置: 
 `SET [SESSION|GLOBAL] TRANSACTION ISOLATION LEVEL [READ UNCOMMITTED|READ COMMITTED|REPEATABLE READ|SERIALIZABLE]`
+
+#### 补充
+
+- 数据持久化服务处理并发机制
+
+1. MySQl 使用排他锁(悲观锁)、乐观锁
+2. ElasticSearch 可通过数据版本号进行校验处理
