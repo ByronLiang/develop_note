@@ -8,7 +8,7 @@
 
 ### ssh密匙生成
 
-- 利用ssh-keygen 生成密匙: `ssh-keygen -t rsa -P "`
+- 利用ssh-keygen 生成密匙: `ssh-keygen -t rsa -P ""`
 - 生成密匙的被访问对象: 通过以不同用户身份来生成访问密匙(root: `/root/.ssh/`) 或 (xxxuser:`/home/xxxuser/.ssh`)
 - 在文件夹里`/root/.ssh/`里会有`id_rsa`(私匙)与`id_rsa.pub`(公匙) 
 - 同时，需手动新建`authorized_keys`: `(chmod 600 authorized_keys)`
