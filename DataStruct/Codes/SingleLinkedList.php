@@ -78,6 +78,9 @@ class SingleLinkedList
 
     /**
      * 进行闭环处理
+     *
+     * @param $node 设置尾部节点
+     * @param $circlePointData 对指定节点的值建立闭环
      */
     public function addCirclePoint(Node $node, $circlePointData)
     {
@@ -105,6 +108,8 @@ class SingleLinkedList
 
     /**
      * 判断是否闭环
+     * 
+     * @return array 返回判断结果及返回相遇节点
      */
     public function judgeCycle()
     {
@@ -112,10 +117,24 @@ class SingleLinkedList
         while ($fast_node != null && $fast_node->next != null) {
             $fast_node = $fast_node->next->next;
             $slow_node = $slow_node->next;
-            if ($fast_node->data == $slow_node->data) return 1;
+            if ($fast_node->data == $slow_node->data) return [1, $fast_node];
         }
 
-        return 0;
+        return [0, null];
+    }
+
+    /**
+     * 查询闭环节点的节点值
+     */
+    public function findCycleNode($fastNode)
+    {
+        $slowNode = $this->header;
+        while ($slowNode != $fastNode) {
+            $fastNode = $fastNode->next;
+            $slowNode = $slowNode->next;
+        }
+
+        return $slowNode;
     }
 }
 
@@ -128,8 +147,12 @@ foreach ($nodes as $value) {
 }
 // 闭环操作
 // $singleLinkedList->addCirclePoint(new Node(10), 5);
-// $res = $singleLinkedList->judgeCycle();
+// list($res, $fastNode) = $singleLinkedList->judgeCycle();
 // echo $res."\n";
+// if ($res > 0) {
+//     $node = $singleLinkedList->findCycleNode($fastNode);
+//     echo "cycle point data: ".$node->data.PHP_EOL;
+// }
 
 // $singleLinkedList->getAll();
 // $singleLinkedList->reverse();
