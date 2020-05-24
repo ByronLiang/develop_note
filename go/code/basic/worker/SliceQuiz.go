@@ -2,6 +2,51 @@ package worker
 
 import "fmt"
 
+func BasicInit()  {
+
+    /**
+    初始化空切片
+    指定下标1 与 2 的值为 2 与 9
+     */
+    var lpp []int
+    lpp = []int{1:2, 2:9}
+
+    // 初始化内存地址 默认不返回值
+    tt := new([10]string)[0:1]
+    // 引发异常 tt[1] = "qq"
+    tt[0] = "pq"
+    tt = append(tt, "w", "qq")
+    //初始化10个元素 容量是20
+    kk := make([]int, 10, 20)
+    /**
+    不能访问超出初始化长度的地址[容量未合并到切片的长度里, 不能进行访问]
+    kk[11] = 11 会引发异常
+    只能通过后期操作, 合并才能进行访问 kk = append(kk, 11)
+     */
+    kk[9] = 11
+    fmt.Println(len(kk), cap(kk), tt, tt[0], kk, lpp)
+    kk1 := []int{2,5,6,88,22,11,23,45,67}
+    //重新分片操作
+    // 向后以三位 但是末尾没有移动。切片只能向后移动
+    kk2 := kk1[3:6:6]
+    /**
+    第三个参数限制容量 否则剩余容量都被分配到kk2里
+    kk2 := kk1[3:6:7]
+     */
+    //当切片进行扩容时 开辟新的内存地址 之后的值变更不影响原切片
+    kk2 = append(kk2, 101)
+    //基于内存地址变更值 同时改变原分片值
+
+    kk2[0] = 10
+    fmt.Println(cap(kk1), kk2, cap(kk2), kk2[:cap(kk2)], kk1)
+
+    //length := len(kk1)
+    //for i := 1; i <= length; i++ {
+    //    kk1 = kk1[1:]
+    //    fmt.Println(kk1, len(kk1), cap(kk1), i)
+    //}
+}
+
 func SliceTest() {
     //var blo []int
 
@@ -23,4 +68,12 @@ func SliceQuiz()  {
     fmt.Println(no1, "", cap(no1))
     no1 = no1[0:3]
     fmt.Println(blo, cap(no1), no, no1)
+}
+
+func TestQuiz(items [5]int)  {
+    for index, item := range items {
+        fmt.Println(&item, &items[index])
+        items[index] *= 2
+    }
+    fmt.Println(items)
 }

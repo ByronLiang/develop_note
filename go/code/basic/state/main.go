@@ -18,7 +18,7 @@ func main()  {
     } else {
         fmt.Println("kk", val)
     }
-
+    MyStruct()
     /**
     switch 使用
      */
