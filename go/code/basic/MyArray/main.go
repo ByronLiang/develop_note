@@ -10,10 +10,12 @@ import (
 func main()  {
     //var mam = [3]int{1,3,9}
     //mamPoint := &[]int{1,3,9}
-    //CopyArray(mam, &mam)
-    //items := [5]int{10, 20, 30, 40, 50}
+    //defer CopyArray(mam, &mam)
+    //defer worker.DeferSample()
+    //items := []int{10, 20, 30, 40, 50}
     //worker.TestQuiz(items)
-    worker.BasicInit()
+    worker.PointSlice()
+    //worker.BasicInit()
     //worker.SliceQuiz()
     //mam = AddNum(20, 21, 10, 10)
     //fmt.Println(mam)

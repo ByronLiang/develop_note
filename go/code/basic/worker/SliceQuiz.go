@@ -6,7 +6,7 @@ func BasicInit()  {
 
     /**
     初始化空切片
-    指定下标1 与 2 的值为 2 与 9
+    初始化指定下标1 与 2 的值为 2 与 9 的切片
      */
     var lpp []int
     lpp = []int{1:2, 2:9}
@@ -70,10 +70,35 @@ func SliceQuiz()  {
     fmt.Println(blo, cap(no1), no, no1)
 }
 
-func TestQuiz(items [5]int)  {
+func TestQuiz(items []int)  {
     for index, item := range items {
         fmt.Println(&item, &items[index])
         items[index] *= 2
     }
     fmt.Println(items)
+}
+
+/**
+当有多个 defer 行为被注册时，它们会以逆序执行（类似栈，即后进先出）
+ */
+func DeferSample()  {
+    for i := 0; i < 3; i++ {
+        defer fmt.Printf("%d ", i)
+    }
+}
+
+func PointSlice() {
+    //指针初始化切片数据结构 长度为0 一个空切片
+    var emptySlice = new([]int)
+    //使用make初始化切片 初始长度为5 默认值为0
+    var initSlice = make([]int, 5)
+    //指针初始化数组数据结构 长度为5 默认值为0 不能初始化具体值
+    var emptyArray = new([5]int)
+    fmt.Println(len(*emptySlice), cap(*emptySlice), len(initSlice), cap(initSlice))
+    //指针追加操作
+    *emptySlice = append(*emptySlice, 1)
+    fmt.Println(*emptySlice, &emptySlice)
+    newPoint := emptyArray
+    (*newPoint)[1] = 3
+    fmt.Println(*emptyArray, *newPoint)
 }

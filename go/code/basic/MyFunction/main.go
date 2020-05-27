@@ -8,9 +8,10 @@ var (
 )
 
 func main()  {
-    worker.Quiz1()
+    //worker.Quiz1()
     lo1, lo2 = ss()
     println(lo1, lo2)
+    worker.StringFunc()
 }
 
 func trans(double int, kk *int) {
