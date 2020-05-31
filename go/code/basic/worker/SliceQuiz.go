@@ -94,10 +94,16 @@ func PointSlice() {
     var initSlice = make([]int, 5)
     //指针初始化数组数据结构 长度为5 默认值为0 不能初始化具体值
     var emptyArray = new([5]int)
+
     fmt.Println(len(*emptySlice), cap(*emptySlice), len(initSlice), cap(initSlice))
-    //指针追加操作
+
+    //空指针切片初始化值 指定下标的值
+    *emptySlice = []int{2:9,3:10}
+    initSlice = []int{2:9,3:10}
+    //指针追加操作(扩容)
     *emptySlice = append(*emptySlice, 1)
-    fmt.Println(*emptySlice, &emptySlice)
+    initSlice = append(initSlice, 1)
+    fmt.Println(*emptySlice, &emptySlice, len(*emptySlice), cap(*emptySlice))
     newPoint := emptyArray
     (*newPoint)[1] = 3
     fmt.Println(*emptyArray, *newPoint)

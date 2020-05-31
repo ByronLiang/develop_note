@@ -4,12 +4,6 @@ import (
     "fmt"
 )
 
-type dog struct {
-    name string
-    age int
-    hobby string
-}
-
 func main()  {
     var lol int
     lol = 1
@@ -18,7 +12,6 @@ func main()  {
     } else {
         fmt.Println("kk", val)
     }
-    MyStruct()
     /**
     switch 使用
      */
@@ -69,25 +62,4 @@ TARGET:
     var b = 10
     b += a
     fmt.Printf("a is %d *** b is %d", a, b)
-}
-
-func MyStruct()  {
-    none := struct {
-        area string
-    }{
-        area: "abc",
-    }
-    cong := dog{
-        name:  "cong",
-        age:   10,
-        hobby: "play",
-    }
-    //同时拷贝内存地址与拷贝数据
-    boy := &cong
-    //新开辟内存地址拷贝数据
-    //boy2 := cong
-    boy.name = "kk"
-    fmt.Println(cong.name, cong, &cong.name)
-    fmt.Println(boy.name, boy, &boy.name)
-    fmt.Println(none, &none.area)
 }

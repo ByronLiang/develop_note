@@ -8,9 +8,9 @@ import (
 //var mam [2]int
 
 func main()  {
-    //var mam = [3]int{1,3,9}
+    var mam = [3]int{1,3,9}
     //mamPoint := &[]int{1,3,9}
-    //defer CopyArray(mam, &mam)
+    defer CopyArray(mam, &mam)
     //defer worker.DeferSample()
     //items := []int{10, 20, 30, 40, 50}
     //worker.TestQuiz(items)
@@ -31,6 +31,7 @@ func AddNum(newNum int, nums ...int) []int {
 func CopyArray(target [3]int, pointTarget *[3]int)  {
     var(
         obj [3]int
+        point *[3]int
     )
     //内存地址拷贝 同时影响原值
     boo := &target
@@ -41,8 +42,12 @@ func CopyArray(target [3]int, pointTarget *[3]int)  {
     obj = target
     obj[2] = 39
 
+    //指针地址拷贝 对原值有影响
+    point = pointTarget
+    point[1] = 100
+
     fmt.Println(boo)
     fmt.Println(obj)
     fmt.Println(target)
-    fmt.Println(*pointTarget)
+    fmt.Println(*pointTarget, point)
 }

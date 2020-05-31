@@ -2,6 +2,7 @@ package worker
 
 import (
     "fmt"
+    "sort"
     "strings"
 )
 
@@ -12,7 +13,7 @@ var (
 
 func StringFunc()  {
     paper := []string{"today","morning"}
-    //查询字符
+    //查询字符[字节查询]
     index, word = GetByte(paper[0], 166)
     //拼接字符串
     data := strings.Join(paper, ",")
@@ -39,4 +40,10 @@ func GetByte(words string, findByte rune) (index int, word string) {
         word = "unfold"
     }
     return
+}
+
+func CoverString()  {
+    list := []string{"banner", "apple", "country"}
+    sort.Strings(list)
+    fmt.Println(list)
 }

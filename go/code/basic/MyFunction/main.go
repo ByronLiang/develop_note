@@ -9,9 +9,12 @@ var (
 
 func main()  {
     //worker.Quiz1()
-    lo1, lo2 = ss()
-    println(lo1, lo2)
-    worker.StringFunc()
+    //lo1, lo2 = ss()
+    //println(lo1, lo2)
+    //worker.StringFunc()
+    worker.MyMapQuiz()
+    //worker.MapPoint()
+    //worker.CoverString()
 }
 
 func trans(double int, kk *int) {
