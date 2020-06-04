@@ -12,6 +12,14 @@ type Dog struct {
     gender string
 }
 
+func (dog *Dog) Name() string {
+    return dog.name
+}
+
+func (dog *Dog) SetName(name string) {
+    dog.name = name
+}
+
 func ShowStruct()  {
     baby := Dog{
         name:  "tom",
@@ -66,3 +74,27 @@ func MyStruct()  {
     fmt.Println(boy.name, boy, &boy.name)
     fmt.Println(none, &none.area)
 }
+
+func InitStruct()  {
+    type MyArray [5]int
+    type MyCap   []int
+    var cc MyCap = make([]int, 5)
+    type el interface {}
+    var myEl el
+    myEl = cc
+    CheckType(myEl)
+    switch myEl.(type) {
+    case MyCap:
+        fmt.Println("ss")
+    }
+    fmt.Println(cc)
+}
+
+func CheckType(el interface {})  {
+    type MyCap   []int
+    switch el.(type) {
+        case MyCap:
+            fmt.Println("ss")
+    }
+}
+
