@@ -108,3 +108,23 @@ func PointSlice() {
     (*newPoint)[1] = 3
     fmt.Println(*emptyArray, *newPoint)
 }
+
+func NullSlice()  {
+    var ww, cc []string
+    //空切片
+    ww = nil
+    cc = []string{"1", "2", "5"}
+    //截取为空切片
+    cc = cc[:0]
+    fmt.Println(ww, cc, cc[0:2], cap(cc))
+}
+
+func CopySlice()  {
+    cc := []string{"1", "2", "5"}
+    //部分数据指向原内存
+    mm := cc
+    kk := &cc
+    //mm = append(mm, "44")
+    mm[0] = "99"
+    fmt.Printf("%p,%p,%p \n", &cc, &mm, kk)
+}

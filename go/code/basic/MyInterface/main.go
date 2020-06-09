@@ -1,6 +1,7 @@
 package main
 
 import (
+    "fmt"
     "test/extra"
     "test/worker"
 )
@@ -10,8 +11,9 @@ func main()  {
     //worker.BasicInitInterfaceQuiz()
     //worker.BasicReflect()
     //worker.InterfaceCheck()
-    testCheckInterface()
-
+    //testCheckInterface()
+    testStaff()
+    //worker.TransJson()
 }
 
 func testCheckInterface()  {
@@ -22,4 +24,13 @@ func testCheckInterface()  {
     cat := &extra.Cat{Name:"jimmy", Age:22}
     worker.CheckAnimalInterface(cat)
     worker.CheckAnimalInterface(dog)
+}
+
+func testStaff()  {
+    staff := &extra.Staff{Level:"basic"}
+    staff.Name = "john"
+    staff.Email = "john@gmail.com"
+    // 不能透过非公开类对成员赋值
+    //staff.manager.Name = "Ben"
+    fmt.Println(extra.Tell(staff))
 }

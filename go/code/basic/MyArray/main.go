@@ -8,19 +8,20 @@ import (
 //var mam [2]int
 
 func main()  {
-    var mam = [3]int{1,3,9}
+    //var mam = [3]int{1,3,9}
     //mamPoint := &[]int{1,3,9}
-    defer CopyArray(mam, &mam)
+    //defer CopyArray(mam, &mam)
     //defer worker.DeferSample()
     //items := []int{10, 20, 30, 40, 50}
     //worker.TestQuiz(items)
-    worker.PointSlice()
+    //worker.PointSlice()
     //worker.BasicInit()
     //worker.SliceQuiz()
     //mam = AddNum(20, 21, 10, 10)
     //fmt.Println(mam)
     //res := worker.WindowMax([]int{1,13,3,2,8,4}, 3)
     //fmt.Println(res)
+    worker.NullSlice()
 }
 
 func AddNum(newNum int, nums ...int) []int {
