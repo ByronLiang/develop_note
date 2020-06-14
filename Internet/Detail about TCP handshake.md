@@ -67,3 +67,29 @@ Client ------ACK-----> Server
 
 1. Time_Wait状态会比较耗费资源；客户端尽量成为主动关闭连接的一方
 
+## TCP BackLog
+
+backlog 是一个连接队列; 由半连接状态 与 全连接状态 两种队列大小
+
+TCP三次握手的过程里，都于半连接状态队列里；完成三次握手，连接被放置于全连接的队列里
+
+### 半连接状态
+
+当服务端接收到客户端的SYN包，服务端会将此连接放进半连接队列`(SYN_RCVD状态)[syns queue]`
+
+相关配置: SYN queue 队列长度由 `/proc/sys/net/ipv4/tcp_max_syn_backlog` 指定，默认为2048。
+
+当队列已满时 客户端的请求将被抛弃，引发客户端无法连接到服务端
+
+### 全连接状态
+
+当服务器接收到客户端的ACK报文后(完成三次握手)，此连接将从半连接队列搬到全连接队列尾部，即 accept queue （服务器端口状态为：ESTABLISHED）
+
+Accept queue 队列长度由 `/proc/sys/net/core/somaxconn` 和使用listen函数时传入的参数，二者取最小值。默认为128
+
+若全连接队列已满, 将会丢弃客户端的ACK请求；容易引发客户端误认为已完成连接，出现调用超时；服务端需要进行重传(重传SYN+ACK给客户端)
+
+### 总结
+
+相关参数适用于Redis服务配置`[tcp-backlog]`：需要同时增加半连接状态`(tcp_max_syn_backlog)` 与 全连接状态的队列容量`(somaxconn)` ，实现高请求下，连接不被抛弃
+
