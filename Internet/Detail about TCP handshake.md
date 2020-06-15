@@ -42,6 +42,12 @@ Client ------ACK-----> Server
 
 4. 主动关闭方收到FIN后，发送一个ACK给被动关闭方，确认序号为收到序号+1`(FIN + 1)`
 
+#### 补充
+
+- 当进程异常退出了，内核就会发送 RST 报文来关闭，它可以不走四次挥手流程，是一个暴力关闭连接的方式
+
+- 安全关闭连接的方式必须通过四次挥手，它由进程调用close和shutdown函数发起 FIN 报文
+
 ### 总结
 
 1. 关闭过程里, 发送`FIN` 可以理解为发起连接的`SYN`
@@ -92,4 +98,21 @@ Accept queue 队列长度由 `/proc/sys/net/core/somaxconn` 和使用listen函�
 ### 总结
 
 相关参数适用于Redis服务配置`[tcp-backlog]`：需要同时增加半连接状态`(tcp_max_syn_backlog)` 与 全连接状态的队列容量`(somaxconn)` ，实现高请求下，连接不被抛弃
+
+## Enhance TCP Connect
+
+### 优化发起连接
+
+#### tcp_syncookies
+
+1. 避免因为半连接队列`syns queue`已满，对请求连接进行丢弃
+
+2. syncookies原理: 服务器根据当前状态计算出一个值，放在己方发出的 SYN+ACK 报文中发出，当客户端返回 ACK 报文时，取出该值验证，如果合法，就认为连接建立成功
+
+#### tcp_abort_on_overflow
+
+1. 当开启此参数设置, 全连接队列已满下, 服务端不会放弃与客户端的连接, 但会告知客户端, 丢弃本次握手过程连接(向客户端发送`RST`); 客户端收到异常为: `connection reset by peer`
+
+2. 若服务端抛弃客户端连接，能有效应对突发高流量的访问特性
+
 
