@@ -1,6 +1,8 @@
 package worker
 
-import "fmt"
+import (
+    "fmt"
+)
 
 func BasicInit()  {
 
@@ -117,6 +119,22 @@ func NullSlice()  {
     //截取为空切片
     cc = cc[:0]
     fmt.Println(ww, cc, cc[0:2], cap(cc))
+}
+
+/**
+函数里的形参使用切片 data 使用引用传递
+ */
+func RemoveIndexData(index int, data []string) []string {
+    if index > 0 && index < (len(data) - 1) {
+        // append 多于一个值 无需添加... 当追加一个切片 需要追加...
+        return append(data[:index], data[(index + 1):]...)
+    } else if index == 0 {
+        return data[1:]
+    } else if index == (len(data) - 1) {
+        return data[:(len(data) - 1)]
+    } else {
+        panic("index error")
+    }
 }
 
 func CopySlice()  {

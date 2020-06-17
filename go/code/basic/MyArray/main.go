@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt"
+    "math/rand"
     "test/worker"
 )
 
@@ -17,11 +18,13 @@ func main()  {
     //worker.PointSlice()
     //worker.BasicInit()
     //worker.SliceQuiz()
-    //mam = AddNum(20, 21, 10, 10)
+    testArrayPara()
     //fmt.Println(mam)
     //res := worker.WindowMax([]int{1,13,3,2,8,4}, 3)
     //fmt.Println(res)
-    worker.NullSlice()
+    //worker.NullSlice()
+    //testRemoveIndexData()
+    //worker.CopySlice()
 }
 
 func AddNum(newNum int, nums ...int) []int {
@@ -51,4 +54,22 @@ func CopyArray(target [3]int, pointTarget *[3]int)  {
     fmt.Println(obj)
     fmt.Println(target)
     fmt.Println(*pointTarget, point)
+}
+
+func testRemoveIndexData()  {
+    data := []string{"apple", "banana", "cat", "dog", "bird"}
+    fmt.Println(data, cap(data))
+    res := worker.RemoveIndexData(3, data)
+    fmt.Println(res, cap(res))
+    fmt.Println(data, cap(data))
+}
+
+/**
+函数动态形参长度处理实例
+ */
+func testArrayPara()  {
+    data1 := AddNum(rand.Intn(10), 21, 10, 10)
+    sample := []int{20, 10, 33}
+    data2 := AddNum(rand.Intn(10), sample...)
+    fmt.Println(data1, data2)
 }
