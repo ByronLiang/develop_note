@@ -1,1 +1,1 @@
-(date '+%Y%m%d %H:%M:%S') >> /home/byron/b_test/job1.log
+(date '+%Y%m%d %H:%M:%S') >> /var/log/job/cron.log

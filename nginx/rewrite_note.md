@@ -27,7 +27,7 @@ permanent  #返回301永久重定向，浏览器地址栏会显示跳转后的UR
 
 ## 常用涉及rewrite的内置Nginx变量
 
-```
+```sh
 HTTP_USER_AGENT      用户使用的代理，例如浏览器；
 HTTP_REFERER         告知服务器，从哪个页面来访问的；
 HTTP_COOKIE          客户端缓存，主要用于存储用户名和密码等信息；
@@ -40,7 +40,8 @@ SERVER_PORT          服务器端口；
 SERVER_PROTOCOL      服务器端协议；
 TIME_YEAR            年；
 TIME_MON             月；
-TIME_DAY              日；
+TIME_DAY             日；
 ```
 
-- 更多例子可参考：[nginx URL重写（rewrite）配置](https://www.jianshu.com/p/a8261a1a64f8).
+- 更多例子可参考：[nginx URL重写（rewrite）配置](https://www.jianshu.com/p/a8261a1a64f8)
+.
