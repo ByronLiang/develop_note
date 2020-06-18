@@ -17,8 +17,8 @@ func TransJson()  {
     var data []Person
     text := `[{"Name": "Wednesday", "Age": 6, "Parents": ["Gomez", "Morticia"]}]`
     target := []byte(text)
-    error := json.Unmarshal(target, &data)
-    if error == nil {
+    err := json.Unmarshal(target, &data)
+    if err == nil {
         for _, item := range data {
             word := "name is " + item.Name + " age is " + strconv.Itoa(item.Age)
             if item.Hobby == nil {

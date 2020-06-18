@@ -18,13 +18,16 @@ func main()  {
     //worker.PointSlice()
     //worker.BasicInit()
     //worker.SliceQuiz()
-    testArrayPara()
+    //testArrayPara()
     //fmt.Println(mam)
     //res := worker.WindowMax([]int{1,13,3,2,8,4}, 3)
     //fmt.Println(res)
     //worker.NullSlice()
     //testRemoveIndexData()
     //worker.CopySlice()
+    worker.ModifiedSlice()
+    //worker.RoundNum(5)
+    //worker.PrintRoundNum(5)
 }
 
 func AddNum(newNum int, nums ...int) []int {

@@ -137,12 +137,80 @@ func RemoveIndexData(index int, data []string) []string {
     }
 }
 
+/**
+copy复制会比等号复制慢。但是copy复制为值复制，改变原切片的值不会影响新切片。
+等号复制为指针复制，改变原切片或新切片都会对另一个产生影响。
+ */
 func CopySlice()  {
+    cp := make([]string, 3, 4)
     cc := []string{"1", "2", "5"}
-    //部分数据指向原内存
+    //切片拷贝 地址完全一致
     mm := cc
-    kk := &cc
-    //mm = append(mm, "44")
+    //值拷贝 不拷贝cc的内存地址
+    copy(cp, cc)
+    //影响cc变量
     mm[0] = "99"
-    fmt.Printf("%p,%p,%p \n", &cc, &mm, kk)
+    //与cc内存地址不相同 不影响cc值
+    cp[2] = "100"
+    fmt.Printf("%p, %p, %p \n", cc, mm, cp)
+    // cc 变量地址发生变更
+    // cc = append(cc, "909")
+    //拷贝进行扩容 与原cc变量地址不相同
+    mm = append(mm, "44")
+    mm[1] = "77"
+    //未超出cap 无需扩容 地址不变
+    cp = append(cp, "777")
+    // 超出cap 会产生扩容 地址变更
+    //cp = append(cp, "777", "009")
+    fmt.Println(cc, mm, cp)
+    fmt.Printf("%p, %p, %p \n", cc, mm, cp)
+}
+
+func ModifiedSlice() {
+    //确保append扩容不会溢出
+    //a := make([]int, 3, 4)
+    //a[0] = 7
+    //a[1] = 8
+    //a[2] = 9
+    a := []int{7, 8, 9}
+    txt := "abc"
+    fmt.Printf("len: %d cap: %d data: %+v add: %p \n", len(a), cap(a), a, a)
+    fmt.Printf("txt add %p \n", &txt)
+    // 值传递 地址操作仍受影响 append 操作不影响
+    upgrade(a, txt)
+    // 引用传递 影响append
+    change(&a)
+    fmt.Printf("len: %d cap: %d data: %+v add: %p \n", len(a), cap(a), a, a)
+    fmt.Println(a, txt)
+}
+
+func upgrade(a []int, txt string) {
+    // 函数内开辟新地址 存储形参的值(值传递) 没有传递内存地址
+    txt = "qq"
+    fmt.Printf("upgrading add: %p, txt add %p \n", a, &txt)
+    // 形参类型未切片 函数里进行地址传递
+    // 对内存地址的操作 会影响外部的数据
+    a[0] = 1
+    // 不影响函数外的值 即便内存地址相同
+    // 在函数内，append操作超过了原始切片的容量，将会有一个新建底层数组的过程
+    // 那么此时再修改函数返回切片，应该不会再影响原始切片
+    a = append(a, 10)
+    fmt.Printf("finished upgrade add: %p \n", a)
+    fmt.Println(a)
+}
+
+/**
+值传递
+ */
+func change(a *[]int) {
+    fmt.Printf("upgrading add: %p \n", a)
+    // 形参传递切片 函数里进行引用传递
+    // 对内存地址的操作 会影响外部的数据
+    (*a)[0] = 1
+    //不影响函数外的值 即便内存地址相同
+    // 在函数内，append操作超过了原始切片的容量，将会有一个新建底层数组的过程
+    // 那么此时再修改函数返回切片，应该不会再影响原始切片
+    *a = append(*a, 10)
+    fmt.Printf("finished upgrade add: %p \n", a)
+    fmt.Println(a)
 }
