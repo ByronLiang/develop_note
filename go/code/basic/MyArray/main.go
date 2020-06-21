@@ -23,9 +23,9 @@ func main()  {
     //res := worker.WindowMax([]int{1,13,3,2,8,4}, 3)
     //fmt.Println(res)
     //worker.NullSlice()
-    //testRemoveIndexData()
+    testRemoveIndexData()
     //worker.CopySlice()
-    worker.ModifiedSlice()
+    //worker.ModifiedSlice()
     //worker.RoundNum(5)
     //worker.PrintRoundNum(5)
 }
@@ -60,10 +60,16 @@ func CopyArray(target [3]int, pointTarget *[3]int)  {
 }
 
 func testRemoveIndexData()  {
+    defer func() {
+        if err := recover(); err != nil {
+            fmt.Println("something error: ", err)
+        }
+    }()
     data := []string{"apple", "banana", "cat", "dog", "bird"}
     fmt.Println(data, cap(data))
-    res := worker.RemoveIndexData(3, data)
-    fmt.Println(res, cap(res))
+    res := worker.RemoveIndexData(13, data)
+    //若异常 无法进行 直接从recover() 完成函数执行
+    fmt.Println(res, cap(res), "qq")
     fmt.Println(data, cap(data))
 }
 

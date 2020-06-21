@@ -127,7 +127,9 @@ func NullSlice()  {
 func RemoveIndexData(index int, data []string) []string {
     if index > 0 && index < (len(data) - 1) {
         // append 多于一个值 无需添加... 当追加一个切片 需要追加...
-        return append(data[:index], data[(index + 1):]...)
+        head := append([]string{}, data[:index]...)
+        return append(head, data[(index + 1):]...)
+        //return append(data[:index], data[(index + 1):]...)
     } else if index == 0 {
         return data[1:]
     } else if index == (len(data) - 1) {
