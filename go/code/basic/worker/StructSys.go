@@ -26,7 +26,7 @@ type myTime struct {
     time.Time //anonymous field
 }
 
-func InitUser(name string, age int, email string, gender string) user {
+func NewUser(name string, age int, email string, gender string) user {
     return user{name, age, email,person{gender,""}}
 }
 

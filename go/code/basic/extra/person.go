@@ -5,7 +5,7 @@ type Person struct {
     lastName  string
 }
 
-func (p *Person) Name() string {
+func (p *Person) GetName() string {
     return p.name
 }
 

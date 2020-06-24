@@ -23,13 +23,13 @@ func BasicChan()  {
 
 func longWait() {
     fmt.Println("Beginning longWait()")
-    time.Sleep(1 * 1e9) // sleep for 5 seconds
+    time.Sleep(time.Second) // sleep for 5 seconds
     fmt.Println("End of longWait()")
 }
 
 func shortWait() {
     fmt.Println("Beginning shortWait()")
-    time.Sleep(2 * 1e9) // sleep for 2 seconds
+    time.Sleep(2 * time.Second) // sleep for 2 seconds
     fmt.Println("End of shortWait()")
 }
 
@@ -48,7 +48,7 @@ func BlockSample()  {
     c := make(chan int)
     go func() {
         //阻塞消费管道消息 引发维持三秒 main线程等待协程完成
-        time.Sleep(2 * 1e9)
+        time.Sleep(2 * time.Second)
         x := <-c
         fmt.Println("received", x)
         //协程线程结束
@@ -68,7 +68,7 @@ func BlockSample()  {
 
 func f1(in chan int) {
     // 初始化协程 sleep两秒
-    time.Sleep(2 * 1e9)
+    time.Sleep(2 * time.Second)
     //维持协程线程不结束 无限循环中读取通道
     for  {
         fmt.Println("blocked")
@@ -88,10 +88,10 @@ func Blocking() {
     //对管道提供数值
     out <- 2
     //协程里读取消息 解除阻塞 进入sleep 2s
-    time.Sleep(2 * 1e9)
+    time.Sleep(2 * time.Second)
     //对管道提供数值
     out <- 19
-    time.Sleep(2 * 1e9)
+    time.Sleep(2 * time.Second)
     //若设置缓冲区作用于主线程投递消息 并在之后建立协程处理消息 才不构成阻塞主线程 并且确保主线程不过早结束
     //不设置缓冲区 产生死锁
     //go f1(out)
@@ -111,11 +111,11 @@ func NoneBlocking()  {
     //异步消费 非阻塞
     //go channelConsumer(out)
     go func() {
-        time.Sleep(4 * 1e9)
+        time.Sleep(4 * time.Second)
         out <- 100
     }()
     go func() {
-        time.Sleep(2 * 1e9)
+        time.Sleep(2 * time.Second)
         out <- 222
     }()
     fmt.Println("pending")
@@ -133,7 +133,7 @@ func NoneBlocking()  {
 func RoutineBreak()  {
     cc := make(chan int)
     go func() {
-        time.Sleep(2 * 1e9)
+        time.Sleep(2 * time.Second)
         cc <- 100
         cc <- 9
         cc <- 20

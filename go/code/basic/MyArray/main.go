@@ -23,16 +23,11 @@ func main()  {
     //res := worker.WindowMax([]int{1,13,3,2,8,4}, 3)
     //fmt.Println(res)
     //worker.NullSlice()
-    testRemoveIndexData()
+    testRemoveIndexData(1)
     //worker.CopySlice()
     //worker.ModifiedSlice()
     //worker.RoundNum(5)
     //worker.PrintRoundNum(5)
-}
-
-func AddNum(newNum int, nums ...int) []int {
-    res := append(nums, newNum)
-    return res
 }
 
 func CopyArray(target [3]int, pointTarget *[3]int)  {
@@ -59,7 +54,7 @@ func CopyArray(target [3]int, pointTarget *[3]int)  {
     fmt.Println(*pointTarget, point)
 }
 
-func testRemoveIndexData()  {
+func testRemoveIndexData(index int)  {
     defer func() {
         if err := recover(); err != nil {
             fmt.Println("something error: ", err)
@@ -67,7 +62,7 @@ func testRemoveIndexData()  {
     }()
     data := []string{"apple", "banana", "cat", "dog", "bird"}
     fmt.Println(data, cap(data))
-    res := worker.RemoveIndexData(13, data)
+    res := worker.RemoveIndexData(index, data)
     //若异常 无法进行 直接从recover() 完成函数执行
     fmt.Println(res, cap(res), "qq")
     fmt.Println(data, cap(data))
@@ -81,4 +76,12 @@ func testArrayPara()  {
     sample := []int{20, 10, 33}
     data2 := AddNum(rand.Intn(10), sample...)
     fmt.Println(data1, data2)
+}
+
+/**
+nums 动态长度
+ */
+func AddNum(newNum int, nums ...int) []int {
+    res := append(nums, newNum)
+    return res
 }

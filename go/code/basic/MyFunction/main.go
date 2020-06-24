@@ -1,6 +1,8 @@
 package main
 
-import "test/worker"
+import (
+    "test/worker"
+)
 
 var (
     lo1 = "kk"

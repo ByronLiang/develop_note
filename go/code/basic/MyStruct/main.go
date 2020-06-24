@@ -6,13 +6,13 @@ import (
 )
 
 func main()  {
+    //var person extra.Person
     var person = extra.Person{}
     person.SetName("oo")
-    name := person.Name()
-    println(name)
+    println(person.GetName())
     //worker.Basic()
     //worker.ShowStruct()
-    jk := worker.InitUser("jk", 20, "jk@gmail.com", "male")
+    jk := worker.NewUser("jk", 20, "jk@gmail.com", "male")
     jk.ShowDetail()
     jk.ChangeName("super jk")
     jk.ShowDetail()

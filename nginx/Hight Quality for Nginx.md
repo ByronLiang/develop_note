@@ -37,3 +37,17 @@ master进程首先通过 socket() 来创建一个 sock 文件描述符用来监�
 - `connection processing methods` 使用`epoll`方式, 通过`EPOLLEXCLUSIVE`标志, 解决惊群问题：不让多个进程在同一时间监听接受连接的socket，而是让每个进程轮流监听，这样当有连接过来的时候，就只有一个进程在监听;
 
 - `accept_mutex` 参数默认是关闭；
+
+## I/O模式 epoll 高效分析
+
+1. 使用I/O模型下的内存共享（mmap）;
+
+`mmap` 通过映射一个普通的文件实现共享内存。普通文件映射到进程地址空间后，进程可以向访问内存的方式对文件进行访问，不需要其他系统调用(read,write)去操作。
+
+2. 使用红黑树(有序二叉树)数据结构存储epoll所监听的套接字
+
+ 一个fd被添加到epoll中之后`epoll_ctl的epoll_ctl_add模式`，内核会为其生成一个对应的epitem结构对象，然后epitem会被添加到红黑树中，红黑树的作用就是在添加、删除、修改fd时，能够快速实现
+
+3. 非阻塞异步机制; 就绪事件(fd)添加进入双向链表里;
+
+`ep_poll_callback`: 这个回调函数把事件添加到rdllist这个双向链表中。一旦有事件发生，epoll就会将该事件添加到双向链表中。那么当我们调用epoll_wait时，epoll_wait只需要检查rdlist双向链表中是否有存在注册的事件
