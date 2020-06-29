@@ -52,23 +52,50 @@ class SingleLinkedList
         echo 'unfound'. "\n";
     }
 
+    /**
+     * 迭代翻转链表
+     * 翻转后, last属性是作为head属性来使用
+     */
     public function reverse()
     {
+        // 保存上一节点的指向对象
         $prev = null;
+        // 迭代对象
         $current = $this->header;
+        // 暂存当前节点的下一节点对象
         $next = null;
         while($current != null) {
+            // 暂存当前节点的下一个节点
             $next = $current->next;
+            // 将当前节点的下一节点指向上一个节点
             $current->next = $prev;
+            // 保存当前节点 以作为下一节点提供指向节点的next对象
             $prev = $current;
+            // 下一节点继续完成迭代业务
             $current = $next;
         }
         $this->header = $prev;
     }
 
-    public function getAll()
+    /**
+     * 递归翻转链表
+     */
+    public function reverseMap(Node $node)
     {
-        $node = $this->header;
+        // 中止产生递归条件: 已经遍历到链表尾部
+        if ($node == null || $node->next == null) {
+            echo "emd map loop".$node->data.PHP_EOL;
+            return $node;
+        }
+        $this->reverseMap($node->next);
+        echo "current: " . $node->data." next: ". $node->next->data .PHP_EOL;
+        // 将一层层递归完成;
+        $node->next->next = $node;
+        $node->next = null;
+    }
+
+    public function getAll($node)
+    {
         while($node->next != null) {
             echo $node->data . "\n";
             $node = $node->next;
@@ -145,6 +172,14 @@ foreach ($nodes as $value) {
     $node = new Node($value);
     $singleLinkedList->add($node);
 }
+
+// 递归翻转测试
+$headNode = $singleLinkedList->header;
+$singleLinkedList->reverseMap($headNode);
+// 当尾部节点作为头节点属性 进行遍历显示节点数据
+$node = $singleLinkedList->last;
+$singleLinkedList->getAll($node);
+
 // 闭环操作
 // $singleLinkedList->addCirclePoint(new Node(10), 5);
 // list($res, $fastNode) = $singleLinkedList->judgeCycle();
@@ -154,6 +189,7 @@ foreach ($nodes as $value) {
 //     echo "cycle point data: ".$node->data.PHP_EOL;
 // }
 
-// $singleLinkedList->getAll();
+// $headNode = $singleLinkedList->header;
+// $singleLinkedList->getAll($headNode);
 // $singleLinkedList->reverse();
 // $singleLinkedList->getAll();

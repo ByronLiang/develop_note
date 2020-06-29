@@ -91,3 +91,13 @@ func CheckAnimalInterface(animal interface{})  {
         fmt.Println("No implementation IAnimal interface")
     }
 }
+
+// 即便Dog结构体未完全实现animal 接口 animal作为空接口 接收对象
+// animal.(*extra.Dog) 换取回Dog 结构体对象
+func GetDogHabit(animal interface{})  {
+    if pet, ok := animal.(*extra.Dog); ok {
+        fmt.Println(pet.Habit())
+    } else {
+        fmt.Println("No implementation IAnimal interface")
+    }
+}

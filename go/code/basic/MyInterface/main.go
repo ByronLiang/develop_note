@@ -11,8 +11,8 @@ func main()  {
     //worker.BasicInitInterfaceQuiz()
     //worker.BasicReflect()
     //worker.InterfaceCheck()
-    //testCheckInterface()
-    testStaff()
+    testCheckInterface()
+    //testStaff()
     //worker.TransJson()
 }
 
@@ -24,6 +24,7 @@ func testCheckInterface()  {
     cat := &extra.Cat{Name:"jimmy", Age:22}
     worker.CheckAnimalInterface(cat)
     worker.CheckAnimalInterface(dog)
+    worker.GetDogHabit(dog)
 }
 
 func testStaff()  {
