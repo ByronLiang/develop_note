@@ -6,6 +6,8 @@
 
 ## Nginx配置
 
+### 配置upstream
+
 - 通过配置反向代理，将请求转向Swoole的服务端口；nginx应用里，反向代理的模块名称`swoole_dev`不能重复
 - 反向代理都是以Http请求其服务地址
 
@@ -16,11 +18,27 @@ upstream swoole_dev {
     keepalive 16;
 }
 ```
+
 对/api/的路径都使用路径别名为`proxyApi`
 
 ```sh
 location ~ ^/api {
     try_files $uri @proxyApi;
+}
+```
+
+### 不基于upstream配置转发
+
+```sh
+location ~ ^/api {
+    # 转发请求地址
+    proxy_pass http://127.0.0.1:5200;
+    include proxy_params;
+    # 使用HTTP 1.1
+    proxy_http_version 1.1;
+    # 开启 websocket
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
 }
 ```
 
@@ -96,3 +114,19 @@ location =/ws {
     proxy_pass http://swoole_dev;
 }
 ```
+
+### proxy_http_version 参数
+
+若不设置`proxy_http_version` 默认是使用`HTTP 1.0`
+
+在HTTP 1.0 需要设置请求head `Connection: keep-alive`; 
+
+HTTP 1.1 默认使用keepalive 设置请求head使用 `Connection: close` 能实现短连接
+
+基于Swoole的WebSocket服务, 其底层连接依赖HTTP1.1的keepalive特性；若使用HTTP1.0 引发连接断开情况
+
+#### Nginx keepalive_timeout
+
+`keepalive_timeout` 若设置为0 则全部请求都是短连接; 
+
+若设定大于0的数值(单位:s[秒]), 则决定此长连接的存活时长
