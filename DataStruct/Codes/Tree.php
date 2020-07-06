@@ -73,16 +73,73 @@ class tree
     }
 }
 
-$trees = new tree(8);
-$trees->left =  new tree(3);
-$trees->left->left =  new tree(1);
-$trees->left->right = new tree(6);
-$trees->left->right->left = new tree(4);
-$trees->left->right->right = new tree(7);
+class Solution
+{
+    /**
+     * 
+     * 计算二叉树路径节点的和满足目标数值(sum)
+     * 
+     * https://leetcode.com/problems/path-sum-iii
+     */
+    public function pathSum($root, int $sum)
+    {
+        if ($root === null) {
+            return 0;
+        }
+        echo "process ". $root->data.PHP_EOL;
+        $pathImLeading = $this->countSum($root, $sum); // 自己为开头的路径数
+        echo $pathImLeading. " what ". $root->data.PHP_EOL;
+        $leftPathSum = $this->pathSum($root->left, $sum); // 左边路径总数（相信他能算出来）
+        $rightPathSum = $this->pathSum($root->right, $sum); // 右边路径总数（相信他能算出来）
+        echo $root->data. " d". $pathImLeading.PHP_EOL;
+        // print_r($pathImLeading);
+        // print_r($leftPathSum);
+        // print_r($rightPathSum);
+    }
+
+    public function countSum($node, $sum)
+    {
+        // 终止递归条件
+        if ($node === null) return 0;
+        echo "count target ". $node->data. " sum is ". $sum. PHP_EOL;
+        // 进行目标数值匹配
+        $isMe = ($node->data == $sum) ? 1 : 0;
+        // 左叉子树递归查询，对剩余数值进行计算($sum - $node->data)
+        $leftBrother = $this->countSum($node->left, $sum - $node->data);
+        // 右叉子树递归查询 对剩余数值进行计算($sum - $node->data)
+        $rightBrother = $this->countSum($node->right, $sum - $node->data);
+        
+        $res = $isMe + $leftBrother + $rightBrother;
+        // 结束递归
+        echo "target : ".$node->data." res ".$res.PHP_EOL;
+        return $res; 
+    }
+}
+
+
+// $trees = new tree(8);
+// $trees->left =  new tree(3);
+// $trees->left->left =  new tree(1);
+// $trees->left->right = new tree(6);
+// $trees->left->right->left = new tree(4);
+// $trees->left->right->right = new tree(7);
 
 $trees->right =  new tree(10);
 $trees->right->right = new tree(14);
 $trees->right->right->left =  new tree(13);
+
+$trees = new tree(10);
+$trees->left =  new tree(5);
+$trees->right =  new tree(-3);
+$trees->left->left =  new tree(3);
+$trees->left->right = new tree(2);
+$trees->right->right =  new tree(11);
+$trees->left->left->left =  new tree(3);
+$trees->left->left->right = new tree(-2);
+$trees->left->right->right = new tree(1);
+
+// $slo = new Solution();
+// $slo->pathSum($trees, 8);
 
 $trees->preOrder();
 echo "\n";
