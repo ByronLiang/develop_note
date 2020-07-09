@@ -42,3 +42,17 @@ GsonFormat
 ### 控制引入包为*显示配置
 
 `Code Style -> Java -> Class count to use import with *` 配置相关数量
+
+### Windows平台 CMD命令行启动SpringBoot（启动内置Tomcat)
+
+`java -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -Xms2048m -Xmx2048m -jar xxx.jar`
+
+1. `xxx.jar` 是项目的打包文件；`./gradlew --no-daemon bootJar`(打包命令)
+
+2. `-Dfile.encoding=UTF-8` 配置jvm(tomcat)内置文件编码 (Window 默认使用GBK) 
+
+解决遇到的错误: `The Java Virtual Machine has not been configured to use the desired default character encoding`
+
+3. `-Xms2048m -Xmx2048m` 配置运行最小最大内存
+
+4. `-Duser.timezone=Asia/Shanghai` 设置jvm默认时区
