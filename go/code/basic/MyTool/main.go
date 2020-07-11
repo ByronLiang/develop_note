@@ -1,12 +1,7 @@
 package main
 
-import (
-    "fmt"
-    "test/alog"
-)
+import "test/tools"
 
 func main()  {
-    //tools.CasualTimeCount(10)
-    res := alog.KmpSearch("hello", "ll")
-    fmt.Println(res)
+    tools.CasualTimeCount(10)
 }

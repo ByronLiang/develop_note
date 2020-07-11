@@ -1,13 +1,8 @@
 package main
 
-import (
-    "fmt"
-    "test/alog"
-)
+import "test/worker"
 
 func main()  {
     //worker.ByteBuff()
-    //worker.EncodeJsonSample()
-    res := alog.BuildStatusTable("ABCDABD")
-    fmt.Println(res)
+    worker.EncodeJsonSample()
 }
