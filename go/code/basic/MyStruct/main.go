@@ -6,15 +6,22 @@ import (
 )
 
 func main()  {
-    //var person extra.Person
-    var person = extra.Person{}
-    person.SetName("oo")
-    println(person.GetName())
     //worker.Basic()
     //worker.ShowStruct()
+    //worker.MyStruct()
+    worker.ReflectTest()
+}
+
+func showUse()  {
     jk := worker.NewUser("jk", 20, "jk@gmail.com", "male")
     jk.ShowDetail()
     jk.ChangeName("super jk")
     jk.ShowDetail()
-    //worker.MyStruct()
+}
+
+func initUser() {
+    //var person extra.Person
+    var person = extra.Person{}
+    person.SetName("oo")
+    println(person.GetName())
 }

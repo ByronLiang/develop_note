@@ -2,6 +2,8 @@ package worker
 
 import (
     "fmt"
+    "reflect"
+    "test/tools"
     "unsafe"
 )
 
@@ -96,5 +98,20 @@ func CheckType(el interface {})  {
         case MyCap:
             fmt.Println("ss")
     }
+}
+
+func ReflectTest()  {
+    type test struct {
+       Name     string      `json:"name" rules:"xx"`
+       Age      int         `json:"age" rules:"ss"`
+    }
+    cc := test{Name:"jj", Age: 30}
+    val := reflect.ValueOf(&cc).Elem()
+    target := val.Field(0)
+    fmt.Println("type of p:", target.Type())
+    fmt.Println("is set ability of p:", target.CanSet())
+    target.SetString("15")
+    data, _ := tools.ToMap(&cc, "rules")
+    fmt.Println(data)
 }
 
