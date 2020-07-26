@@ -75,6 +75,7 @@ class tree
 
 class Solution
 {
+    public $math = [];
     /**
      * 
      * 计算二叉树路径节点的和满足目标数值(sum)
@@ -114,8 +115,25 @@ class Solution
         echo "target : ".$node->data." res ".$res.PHP_EOL;
         return $res; 
     }
+
+    public function rangeSumBST($node, $left, $right)
+    {
+        if ($node == null) {
+            return 0;
+        }
+        if ($node->data > $right) {
+            return $this->rangeSumBST($node->left, $left, $right);
+        }
+        if ($node->data < $left) {
+            return $this->rangeSumBST($node->right, $left, $right);
+        }
+        $this->math[] = $node->data;
+        return $node->data + $this->rangeSumBST($node->left, $left, $right) + 
+        $this->rangeSumBST($node->right, $left, $right);
+    }
 }
 
+$slo = new Solution();
 
 // $trees = new tree(8);
 // $trees->left =  new tree(3);
@@ -123,30 +141,41 @@ class Solution
 // $trees->left->right = new tree(6);
 // $trees->left->right->left = new tree(4);
 // $trees->left->right->right = new tree(7);
+// $trees->right =  new tree(10);
+// $trees->right->right = new tree(14);
+// $trees->right->right->left =  new tree(13);
 
-$trees->right =  new tree(10);
-$trees->right->right = new tree(14);
-$trees->right->right->left =  new tree(13);
+// $trees = new tree(10);
+// $trees->left =  new tree(5);
+// $trees->right =  new tree(-3);
+// $trees->left->left =  new tree(3);
+// $trees->left->right = new tree(2);
+// $trees->right->right =  new tree(11);
+// $trees->left->left->left =  new tree(3);
+// $trees->left->left->right = new tree(-2);
+// $trees->left->right->right = new tree(1);
+
+
+// $slo->pathSum($trees, 8);
+
+// $trees->preOrder();
+// echo "\n";
+// $trees->inOrder();
+// echo "\n";
+// $trees->postOrder();
+// echo "\n";
+
+// // 打印寻数路径
+// $trees->printPath($trees, $argv[1]);
+
 
 $trees = new tree(10);
 $trees->left =  new tree(5);
-$trees->right =  new tree(-3);
+$trees->right =  new tree(15);
 $trees->left->left =  new tree(3);
-$trees->left->right = new tree(2);
-$trees->right->right =  new tree(11);
-$trees->left->left->left =  new tree(3);
-$trees->left->left->right = new tree(-2);
-$trees->left->right->right = new tree(1);
+$trees->left->right = new tree(7);
+$trees->right->right =  new tree(18);
 
-// $slo = new Solution();
-// $slo->pathSum($trees, 8);
-
-$trees->preOrder();
-echo "\n";
-$trees->inOrder();
-echo "\n";
-$trees->postOrder();
-echo "\n";
-
-// 打印寻数路径
-$trees->printPath($trees, $argv[1]);
+$res = $slo->rangeSumBST($trees, 1, 14);
+print_r($slo->math);
+print_r($res);
