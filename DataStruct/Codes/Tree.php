@@ -128,8 +128,77 @@ class Solution
             return $this->rangeSumBST($node->right, $left, $right);
         }
         $this->math[] = $node->data;
-        return $node->data + $this->rangeSumBST($node->left, $left, $right) + 
-        $this->rangeSumBST($node->right, $left, $right);
+        $leftSum = $this->rangeSumBST($node->left, $left, $right);
+        $rightSum = $this->rangeSumBST($node->right, $left, $right);
+
+        return $node->data + $leftSum + $rightSum;
+    }
+
+    /**
+     * 行遍历
+     */
+    public function loadBST($node)
+    {
+        $queue = array();
+        $val = array();
+        $queue[] = $node;
+        $height = 0;
+        $heightDetail = array();
+        for (; count($queue) > 0 ;) {
+            $height++;
+            $heightNodeLength = count($queue);
+            $heightDetail[$height] = $heightNodeLength;
+            for ($i=0; $i < $heightNodeLength; $i++) { 
+                $val[] = $queue[$i]->data;
+                $leftNode = $queue[$i]->left;
+                $rightNode = $queue[$i]->right;
+                if ($leftNode != null) {
+                    $queue[] = $leftNode;
+                }
+                if ($rightNode != null) {
+                    $queue[] = $rightNode;
+                }
+            }
+            $queue = array_slice($queue, $heightNodeLength);
+        }
+
+        return [$val, $heightDetail];
+    }
+
+    /**
+     * 交叉行遍历
+     */
+    public function crossBST($node)
+    {
+        $queue = array();
+        $val = array();
+        $queue[] = $node;
+        $height = 0;
+        $heightDetail = array();
+        for (; count($queue) > 0 ;) {
+            $height++;
+            $heightNodeLength = count($queue);
+            $heightDetail[$height]['num'] = $heightNodeLength;
+            for ($i=0; $i < $heightNodeLength; $i++) {
+                if ($height % 2 == 0) {
+                    $j = $heightNodeLength - 1 - $i;
+                    $heightDetail[$height]['data'][] = $queue[$j]->data;
+                } else {
+                    $heightDetail[$height]['data'][] = $queue[$i]->data;
+                }
+                $leftNode = $queue[$i]->left;
+                $rightNode = $queue[$i]->right;
+                if ($leftNode != null) {
+                    $queue[] = $leftNode;
+                }
+                if ($rightNode != null) {
+                    $queue[] = $rightNode;
+                }
+            }
+            $queue = array_slice($queue, $heightNodeLength);
+        }
+
+        return $heightDetail;
     }
 }
 
@@ -176,6 +245,11 @@ $trees->left->left =  new tree(3);
 $trees->left->right = new tree(7);
 $trees->right->right =  new tree(18);
 
-$res = $slo->rangeSumBST($trees, 1, 14);
-print_r($slo->math);
-print_r($res);
+// $res = $slo->rangeSumBST($trees, 1, 14);
+// print_r($slo->math);
+// print_r($res);
+
+list($vals, $levels) = $slo->loadBST($trees);
+print_r($vals);
+print_r($levels);
+// print_r($slo->crossBST($trees));
