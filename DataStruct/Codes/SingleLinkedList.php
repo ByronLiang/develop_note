@@ -84,14 +84,16 @@ class SingleLinkedList
     {
         // 中止产生递归条件: 已经遍历到链表尾部
         if ($node == null || $node->next == null) {
-            echo "emd map loop".$node->data.PHP_EOL;
+            echo "end map loop ".$node->data.PHP_EOL;
             return $node;
         }
-        $this->reverseMap($node->next);
+        $nextNode = $this->reverseMap($node->next);
+        echo "next ". $nextNode->data. PHP_EOL;
         echo "current: " . $node->data." next: ". $node->next->data .PHP_EOL;
         // 将一层层递归完成;
-        $node->next->next = $node;
+        $nextNode->next = $node;
         $node->next = null;
+        return $node;
     }
 
     public function getAll($node)
