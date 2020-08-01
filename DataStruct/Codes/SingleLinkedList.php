@@ -167,17 +167,22 @@ class SingleLinkedList
     public function removeOneRepeatMap(Node $node)
     {
         if ($node == null || $node->next == null) {
+            echo "last one: ". $node->data .PHP_EOL;
             return $node;
         }
         echo "ff ". $node->data .PHP_EOL;
         if ($node->data == $node->next->data) {
-            $node = $this->removeOneRepeatMap($node->next);
-            echo "xx ". $node->data .PHP_EOL;
+            $res = $this->removeOneRepeatMap($node->next);
+            // 当前节点与下一点相同, 不进行指向下一节点, 但需进行替换处理
+            $node = $res;
+            echo PHP_EOL."xx ". $node->data . " replaced obj the next is " . $res->next->data. PHP_EOL;
         } else {
-            $node->next = $this->removeOneRepeatMap($node->next);
-            echo "yy ". $node->data .PHP_EOL;
+            $res = $this->removeOneRepeatMap($node->next);
+            $node->next = $res;
+            echo PHP_EOL."yy ". $node->data ." the next is " .$res->data .PHP_EOL;
         }
-        // echo $node->data .PHP_EOL;
+        echo PHP_EOL."now node is ". $node->data .
+            " and the next is ". $node->next->data .PHP_EOL;
         return $node;
     }
 
@@ -220,7 +225,7 @@ class SingleLinkedList
 
 $singleLinkedList = new SingleLinkedList();
 
-$nodes = [2, 5, 5, 8, 8, 10, 15];
+$nodes = [2, 5, 5, 5, 8, 8, 10, 15];
 foreach ($nodes as $value) {
     $node = new Node($value);
     $singleLinkedList->add($node);
