@@ -22,6 +22,10 @@ Client ---> Server     ACK
 
 3. 能有效避免失效连接出现，增强通讯信道的有效性
 
+### 完成三次握手的流程
+
+1. Http的request与response将在TCP通道之间传输
+
 ### 4-way handshake close connect
 
 ```sh

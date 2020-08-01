@@ -163,22 +163,81 @@ class SingleLinkedList
 
         return $slowNode;
     }
+
+    public function removeOneRepeatMap(Node $node)
+    {
+        if ($node == null || $node->next == null) {
+            return $node;
+        }
+        echo "ff ". $node->data .PHP_EOL;
+        if ($node->data == $node->next->data) {
+            $node = $this->removeOneRepeatMap($node->next);
+            echo "xx ". $node->data .PHP_EOL;
+        } else {
+            $node->next = $this->removeOneRepeatMap($node->next);
+            echo "yy ". $node->data .PHP_EOL;
+        }
+        // echo $node->data .PHP_EOL;
+        return $node;
+    }
+
+    public function removeOneRepeat()
+    {
+        $node = $this->header;
+        while($node != null) {
+            while ($node->next != null) {
+                if ($node->next->data == $node->data) {
+                    $node->next = $node->next->next;
+                } else {
+                    break;
+                }
+            }
+            $node = $node->next;
+        }
+    }
+
+    public function removeAllRepeated()
+    {
+        $temp = new Node(0);
+        $temp->next = $this->header;
+        $fast = $temp->next;
+        $slow = $temp;
+        while($fast != null) {
+            if ($fast->next != null && $fast->next->data == $fast->data) {
+                while ($fast->next != null && $fast->next->data == $fast->data) {
+                    $fast = $fast->next;
+                }
+                $slow->next = $fast->next;
+                $fast = $fast->next;
+            } else {
+                $slow = $slow->next;
+                $fast = $fast->next;
+            }
+        }
+        return $temp->next;
+    }
 }
 
 $singleLinkedList = new SingleLinkedList();
 
-$nodes = [2, 5, 8, 10, 15];
+$nodes = [2, 5, 5, 8, 8, 10, 15];
 foreach ($nodes as $value) {
     $node = new Node($value);
     $singleLinkedList->add($node);
 }
 
 // 递归翻转测试
-$headNode = $singleLinkedList->header;
-$singleLinkedList->reverseMap($headNode);
-// 当尾部节点作为头节点属性 进行遍历显示节点数据
-$node = $singleLinkedList->last;
-$singleLinkedList->getAll($node);
+// $headNode = $singleLinkedList->header;
+// $singleLinkedList->reverseMap($headNode);
+// // 当尾部节点作为头节点属性 进行遍历显示节点数据
+// $node = $singleLinkedList->last;
+// $singleLinkedList->getAll($node);
+
+// 移除重复数值
+$singleLinkedList->removeOneRepeatMap($singleLinkedList->header);
+// $singleLinkedList->removeOneRepeat();
+// $node = $singleLinkedList->removeAllRepeated();
+// $singleLinkedList->getAll($node);
 
 // 闭环操作
 // $singleLinkedList->addCirclePoint(new Node(10), 5);
