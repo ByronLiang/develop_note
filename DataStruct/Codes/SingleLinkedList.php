@@ -87,7 +87,10 @@ class SingleLinkedList
             echo "end map loop ".$node->data.PHP_EOL;
             return $node;
         }
+        echo "ff ". $node->data .PHP_EOL;
         $nextNode = $this->reverseMap($node->next);
+        // $nextNode 前一个完成递归所返回的结果
+        // $node 当前递归的形参
         echo "next ". $nextNode->data. PHP_EOL;
         echo "current: " . $node->data." next: ". $node->next->data .PHP_EOL;
         // 将一层层递归完成;
