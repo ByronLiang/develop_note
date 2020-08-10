@@ -2,6 +2,8 @@ package worker
 
 import (
     "fmt"
+    "image/color"
+    "log"
     "reflect"
     "test/tools"
     "unsafe"
@@ -113,5 +115,49 @@ func ReflectTest()  {
     target.SetString("15")
     data, _ := tools.ToMap(&cc, "rules")
     fmt.Println(data)
+}
+
+type Point struct{ X, Y float64 }
+
+type ColoredPoint struct {
+    Point
+    Color color.RGBA
+}
+
+type PColorPoint struct {
+    *Point
+    Color color.RGBA
+}
+
+func (p ColoredPoint) Distance(q *Point) float64 {
+    return p.Point.Distance(*q)
+}
+
+func (point Point) Distance(q Point) float64 {
+    return 2.11 + q.X
+}
+
+func MethodStruct()  {
+    var c = ColoredPoint{
+        Point: Point{1.2, 9.1},
+        Color: color.RGBA{0, 0, 255, 255},
+    }
+    var d = PColorPoint{
+        Point: &Point{1.1, 2.1},
+        Color: color.RGBA{255, 0, 0, 255},
+    }
+    // 接收参数必须强一致性, 必须指向结构体的成员, 而不能是整个结构体
+    log.Print(c.Distance(&c.Point))
+    log.Print(d.Distance(*d.Point))
+
+    // 以变量声明函数方法
+    var mm func(point ColoredPoint, q *Point) float64
+    mm = ColoredPoint.Distance
+    kk := ColoredPoint.Distance
+    // Distance实际上是指定了ColoredPoint对象为接收器的一个方法func (p ColoredPoint) Distance(q *Point)，
+    // 但通过ColoredPoint.Distance得到的函数需要比实际的Distance方法多一个参数，
+    // 即其需要用第一个额外参数指定接收器，后面排列Distance方法的参数。
+    mm(c, &c.Point)
+    kk(c, &c.Point)
 }
 
