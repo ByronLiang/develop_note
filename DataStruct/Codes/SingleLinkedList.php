@@ -208,14 +208,16 @@ class SingleLinkedList
             }
             echo "put same node : ". $node->next->data .PHP_EOL;
             $res = $this->removeAllRepeatMap($node->next);
+            
+            echo PHP_EOL."origin node ". $node->data. " replaced by node " .$res->data .PHP_EOL;
             // 当前节点与下一点相同, 不进行指向下一节点, 但需进行替换处理
             $node = $res;
             // 确保能更新链表的header节点
             $this->header = $res;
             echo PHP_EOL."xx ". $node->data . " replaced obj the next is " . $res->next->data. PHP_EOL;
         } else {
-            echo "put uniqle node : ". $node->next->data .PHP_EOL;
             $res = $this->removeAllRepeatMap($node->next);
+            // 当前节点的next指向上一个递归返回的节点
             $node->next = $res;
             // 确保能更新链表的header节点
             $this->header = $node;
