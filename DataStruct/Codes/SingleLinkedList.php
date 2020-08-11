@@ -191,6 +191,41 @@ class SingleLinkedList
         return $node;
     }
 
+    public function removeAllRepeatMap($node)
+    {
+        if ($node == null || $node->next == null) {
+            echo "last one: ". $node->data .PHP_EOL;
+            return $node;
+        }
+        if ($node->data == $node->next->data) {
+            $node->next = $node->next->next;
+            while ($node->next != null) {
+                if ($node->next->data == $node->data) {
+                    $node->next = $node->next->next;
+                } else {
+                    break;
+                }
+            }
+            echo "put same node : ". $node->next->data .PHP_EOL;
+            $res = $this->removeAllRepeatMap($node->next);
+            // 当前节点与下一点相同, 不进行指向下一节点, 但需进行替换处理
+            $node = $res;
+            // 确保能更新链表的header节点
+            $this->header = $res;
+            echo PHP_EOL."xx ". $node->data . " replaced obj the next is " . $res->next->data. PHP_EOL;
+        } else {
+            echo "put uniqle node : ". $node->next->data .PHP_EOL;
+            $res = $this->removeAllRepeatMap($node->next);
+            $node->next = $res;
+            // 确保能更新链表的header节点
+            $this->header = $node;
+            echo PHP_EOL."yy ". $node->data ." the next is " .$res->data .PHP_EOL;
+        }
+        echo PHP_EOL."now node is ". $node->data .
+            " and the next is ". $node->next->data .PHP_EOL;
+        return $node;
+    }
+
     public function removeOneRepeat()
     {
         $node = $this->header;
@@ -244,10 +279,12 @@ foreach ($nodes as $value) {
 // $singleLinkedList->getAll($node);
 
 // 移除重复数值
-$singleLinkedList->removeOneRepeatMap($singleLinkedList->header);
+// $singleLinkedList->removeOneRepeatMap($singleLinkedList->header);
+// 移除全部重复数值
+$singleLinkedList->removeAllRepeatMap($singleLinkedList->header);
 // $singleLinkedList->removeOneRepeat();
 // $node = $singleLinkedList->removeAllRepeated();
-// $singleLinkedList->getAll($node);
+$singleLinkedList->getAll($singleLinkedList->header);
 
 // 闭环操作
 // $singleLinkedList->addCirclePoint(new Node(10), 5);
