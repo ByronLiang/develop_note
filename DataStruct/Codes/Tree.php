@@ -200,6 +200,30 @@ class Solution
 
         return $heightDetail;
     }
+
+    /**
+     * 中序迭代遍历
+     */
+    public function midBST($node) {
+        $queue = array();
+        $val = array();
+        while ($node != null | count($queue) > 0) {
+            while ($node != null) {
+                // 继续入栈
+                $queue[] = $node;
+                // 只向左分支入栈处理
+                $node = $node->left;
+            }
+            // 出栈
+            $currentNode = $queue[count($queue) - 1];
+            $queue = array_slice($queue, 0, count($queue) - 1);
+            $val[] = $currentNode->data;
+            // 右分支树节点
+            $node = $currentNode->right;
+        }
+
+        return $val;
+    }
 }
 
 $slo = new Solution();
@@ -238,6 +262,14 @@ $slo = new Solution();
 // $trees->printPath($trees, $argv[1]);
 
 
+/**
+ *          10
+ *         /  \
+ *        5    15
+ *       / \     \
+ *      3   7    18
+ */
+
 $trees = new tree(10);
 $trees->left =  new tree(5);
 $trees->right =  new tree(15);
@@ -249,7 +281,8 @@ $trees->right->right =  new tree(18);
 // print_r($slo->math);
 // print_r($res);
 
-list($vals, $levels) = $slo->loadBST($trees);
+// list($vals, $levels) = $slo->loadBST($trees);
+$vals = $slo->midBST($trees);
 print_r($vals);
-print_r($levels);
+// print_r($levels);
 // print_r($slo->crossBST($trees));
