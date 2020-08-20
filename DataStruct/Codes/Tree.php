@@ -224,6 +224,40 @@ class Solution
 
         return $val;
     }
+
+    /**
+     * 最大深度
+     */
+    public function findMaxDepth($node) {
+        if ($node == null) {
+            return 0;
+        }
+        $leftNodeDepth = $this->findMaxDepth($node->left);
+        echo "left: ". $leftNodeDepth. " node: " . $node->data . PHP_EOL;
+        $rightNodeDepth = $this->findMaxDepth($node->right);
+        echo "right: ". $rightNodeDepth. " node: " . $node->data . PHP_EOL;
+        
+        $res = max($leftNodeDepth, $rightNodeDepth) + 1;
+        echo "res: ". $res. " node: " . $node->data . PHP_EOL;
+        return $res;
+    }
+
+    /**
+     * 最小深度
+     */
+    public function findMinDepth($node) {
+        if ($node == null) {
+            return 0;
+        }
+        $leftNodeDepth = $this->findMaxDepth($node->left);
+        echo "left: ". $leftNodeDepth. " node: " . $node->data . PHP_EOL;
+        $rightNodeDepth = $this->findMaxDepth($node->right);
+        echo "right: ". $rightNodeDepth. " node: " . $node->data . PHP_EOL;
+        
+        $res = min($leftNodeDepth, $rightNodeDepth) + 1;
+        echo "res: ". $res. " node: " . $node->data . PHP_EOL;
+        return $res;
+    }
 }
 
 $slo = new Solution();
@@ -282,7 +316,8 @@ $trees->right->right =  new tree(18);
 // print_r($res);
 
 // list($vals, $levels) = $slo->loadBST($trees);
-$vals = $slo->midBST($trees);
+// $vals = $slo->midBST($trees);
+$vals = $slo->findMaxDepth($trees);
 print_r($vals);
 // print_r($levels);
 // print_r($slo->crossBST($trees));
