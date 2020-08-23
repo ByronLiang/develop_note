@@ -88,12 +88,66 @@ class SortHelper
             return $this->repFind($target, $mid + 1, $right);
         }
     }
+
+    /**
+     * 原始归并排序
+     * 不断进行拆分
+     * 完成排序逐一进行合并
+     */
+    public function OriginMergeSort($arr)
+    {
+        $len = count($arr);
+        if ($len < 2) {
+            // 终止再生成递归
+            return $arr;
+        }
+        $middle = (int) ($len / 2);
+        $left = array_slice($arr, 0, $middle);
+        $right = array_slice($arr, $middle);
+        $leftDiv = $this->OriginMergeSort($left);
+        $rightDiv = $this->OriginMergeSort($right);
+        $res = $this->merge($leftDiv, $rightDiv);
+        return $res;
+    }
+
+    private function merge($left, $right)
+    {
+        echo "left".PHP_EOL;
+        print_r($left);
+        echo "right".PHP_EOL;
+        print_r($right);
+        while (count($left) > 0 && count($right) > 0) {
+            if ($left[0] <= $right[0]) {
+                $result[] = array_shift($left);
+            } else {
+                $result[] = array_shift($right);
+            }
+        }
+        while (count($left))
+            $result[] = array_shift($left);
+        while (count($right))
+            $result[] = array_shift($right);
+
+        return $result;
+    }
+
+    public function segment($arr, $left, $right)
+    {
+        if ($left >= $right) return;
+        $mid = $left + (int) (($right - $left) / 2);
+        $this->segment($arr, $left, $mid);
+        $this->segment($arr, $mid + 1, $right);
+        echo "left index: ". $left. " mid: ". $mid. " rig: ". $right.PHP_EOL; 
+    }
 }
 
 $arr = array(2, 1, 5, 8, 3, 7);
 $obj = new SortHelper();
 // $data = $obj->MergeQuickSort($arr);
-
+// $data = $obj->OriginMergeSort($arr);
+// print_r($data);
+$obj->segment($arr, 0, count($arr) - 1);
+return;
 $data = $obj->bindSort($arr);
 $obj->sortedArray = $data;
 $res = $obj->find(7);

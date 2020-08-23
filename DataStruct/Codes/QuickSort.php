@@ -24,9 +24,9 @@ function Partition(array &$arr, $low, $high){
 
 function QSort(array &$arr, $low, $high){
     if ($low < $high) {
-        $pivot = Partition($arr, $low, $high);  //将$arr[$low...$high]一分为二，算出枢轴值
-        QSort($arr, $low, $pivot - 1);   //对低子表进行递归排序
-        QSort($arr, $pivot + 1, $high);  //对高子表进行递归排序
+        $mid = Partition($arr, $low, $high);  //将$arr[$low...$high]一分为二，算出枢轴值
+        QSort($arr, $low, $mid - 1);   //对低子表进行递归排序(左边界)
+        QSort($arr, $mid + 1, $high);  //对高子表进行递归排序(有边界)
     }
 }
 

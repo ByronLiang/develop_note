@@ -7,7 +7,7 @@ import (
 
 type BasicHttp struct {}
 
-var context *HttpContext
+var httpContext *HttpContext
 
 func BuildHttpService() {
     var basic BasicHttp
@@ -19,6 +19,6 @@ func BuildHttpService() {
 func (b *BasicHttp) ServeHTTP(w http.ResponseWriter, req *http.Request) {
     r := req.URL.Path
     fmt.Println(r)
-    context = &HttpContext{req, w}
-    _, _ = context.response.Write([]byte("qq"))
+    httpContext = &HttpContext{req, w}
+    _, _ = httpContext.response.Write([]byte("qq"))
 }

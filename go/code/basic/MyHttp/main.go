@@ -5,5 +5,7 @@ import (
 )
 
 func main()  {
-    HttpBuilder.BuildHttpService()
+    //HttpBuilder.CheckDemo()
+    HttpBuilder.FetchSys()
+    //HttpBuilder.BuildHttpService()
 }

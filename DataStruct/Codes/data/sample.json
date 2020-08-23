@@ -1,0 +1,104 @@
+{
+    "id": 0,
+    "name": "root",
+    "children": [
+        {
+            "id": 1000,
+            "name": "food",
+            "children": [
+                {
+                    "id": 1230,
+                    "name": "meat",
+                    "children": [
+                        {
+                            "id": 2191,
+                            "name": "fish",
+                            "children": [
+                                {
+                                    "id": 2301,
+                                    "name": "shark"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1120,
+                            "name": "cow",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": 1200,
+                    "name": "veg",
+                    "children": [
+                        {
+                            "id": 1210,
+                            "name": "egg",
+                            "children": []
+                        },
+                        {
+                            "id": 1220,
+                            "name": "fruit",
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2000,
+            "name": "book",
+            "children": [
+                {
+                    "id": 2100,
+                    "name": "fashion",
+                    "children": [
+                        {
+                            "id": 4110,
+                            "name": "hat",
+                            "children": [
+                                {
+                                    "id": 2111,
+                                    "name": "outdoor",
+                                    "children": []
+                                },
+                                {
+                                    "id": 2112,
+                                    "name": "sport",
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "id": 2124,
+                            "name": "clother",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": 3212,
+                    "name": "design",
+                    "children": [
+                        {
+                            "id": 2210,
+                            "name": "music",
+                            "children": []
+                        },
+                        {
+                            "id": 2220,
+                            "name": "art",
+                            "children": [
+                                {
+                                    "id": 2221,
+                                    "name": "western",
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
