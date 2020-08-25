@@ -17,6 +17,7 @@ func main()  {
     worker.MyMapQuiz()
     //worker.MapPoint()
     //worker.CoverString()
+    worker.DiffEncodeByte()
 }
 
 func trans(double int, kk *int) {

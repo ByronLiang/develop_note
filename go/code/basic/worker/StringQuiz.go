@@ -47,3 +47,16 @@ func CoverString()  {
     sort.Strings(list)
     fmt.Println(list)
 }
+
+func DiffEncodeByte() {
+    var (
+        // 8位 满足一个英文字符
+        en = []byte("good-day")
+        // byte 接收中文字符 会出现乱码
+        // rune 32位 四字符 能完整接收中/英文字符(3位字符)
+        cn = []rune("你好-明天, What I Can Do")
+    )
+    enTxt := en[0:4]
+    cnTxt := cn[0:11]
+    fmt.Println(string(enTxt), string(cnTxt))
+}

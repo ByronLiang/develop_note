@@ -131,22 +131,73 @@ class SortHelper
         return $result;
     }
 
-    public function segment($arr, $left, $right)
+    public function segment(&$arr, $left, $right)
     {
         if ($left >= $right) return;
+
         $mid = $left + (int) (($right - $left) / 2);
+
+        echo "left index: ". $left. " mid: ". $mid. " rig: ". $right.PHP_EOL;
+
         $this->segment($arr, $left, $mid);
+
+        echo "finished left; process right; left: ". $left. " mid: ". $mid. " rig: ". $right.PHP_EOL;
+
         $this->segment($arr, $mid + 1, $right);
-        echo "left index: ". $left. " mid: ". $mid. " rig: ". $right.PHP_EOL; 
+
+        echo "after left index: ". $left. " mid: ". $mid. " rig: ". $right.PHP_EOL;
+
+        $this->MergeWithSegment($arr, $left, $mid, $right);
+    }
+
+    private function MergeWithSegment(&$arr, $left, $mid, $right)
+    {
+        $tempArr = [];
+        $rightIndex = $mid + 1;
+        $tempArrIndex = $left;
+        $beginIndex = $left;
+
+        // 左右切片分支进行对比 组成具备排序的临时数组
+        while ($left <= $mid && $rightIndex <= $right) {
+            // 比较大小 进入临时数组 则对应下标递进1
+            if ($arr[$left] <= $arr[$rightIndex]) {
+                $tempArr[$tempArrIndex] = $arr[$left];
+                $left++;
+            } else {
+                $tempArr[$tempArrIndex] = $arr[$rightIndex];
+                $rightIndex++;
+            }
+            $tempArrIndex++;
+        }
+        // 若仍剩余, 追加到临时数组末尾
+        while ($left <= $mid) {
+            $tempArr[$tempArrIndex] = $arr[$left];
+            $left ++;
+            $tempArrIndex ++;
+        }
+        // 右分支
+        while ($rightIndex <= $right) {
+            $tempArr[$tempArrIndex] = $arr[$rightIndex];
+            $rightIndex ++;
+            $tempArrIndex ++;
+        }
+        // 将临时数组的排序 对原数组进行调整处理
+        while ($beginIndex <= $right) {
+            $arr[$beginIndex] = $tempArr[$beginIndex];
+            $beginIndex ++;
+        }
     }
 }
 
-$arr = array(2, 1, 5, 8, 3, 7);
+// $arr = array(2, 1, 5, 8, 3, 7);
+$arr = [6, 5, 3, 1, 7, 2, 4];
 $obj = new SortHelper();
 // $data = $obj->MergeQuickSort($arr);
 // $data = $obj->OriginMergeSort($arr);
-// print_r($data);
 $obj->segment($arr, 0, count($arr) - 1);
+$data = $arr;
+echo implode("-", $data).PHP_EOL;
+// print_r($data);
 return;
 $data = $obj->bindSort($arr);
 $obj->sortedArray = $data;
