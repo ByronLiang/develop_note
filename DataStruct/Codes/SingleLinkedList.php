@@ -263,7 +263,52 @@ class SingleLinkedList
         }
         return $temp->next;
     }
+
+    public function combineNodeList($fNodeList, $sNodeList)
+    {
+        $temp = new Node(0);
+        $current = $temp;
+        $fNode = $fNodeList->header;
+        $sNode = $sNodeList->header;
+        while ($fNode != null && $sNode != null) {
+            if ($fNode->data <= $sNode->data) {
+                $current->next = $fNode;
+                $current = $current->next;
+                $fNode = $fNode->next;
+            } else {
+                $current->next = $sNode;
+                $current = $current->next;
+                $sNode = $sNode->next;
+            }
+        }
+        if ($fNode != null) {
+            $current->next = $fNode;
+        }
+        if ($sNode != null) {
+            $current->next = $sNode;
+        }
+
+        return $temp->next;
+    }
 }
+
+$fNodeList = new SingleLinkedList();
+$nodes = [1, 2, 4, 8, 10];
+foreach ($nodes as $value) {
+    $node = new Node($value);
+    $fNodeList->add($node);
+}
+$sNodeList = new SingleLinkedList();
+$nodes = [2, 3, 5];
+foreach ($nodes as $value) {
+    $node = new Node($value);
+    $sNodeList->add($node);
+}
+
+$res = $fNodeList->combineNodeList($fNodeList, $sNodeList);
+$fNodeList->getAll($res);
+
+return;
 
 $singleLinkedList = new SingleLinkedList();
 

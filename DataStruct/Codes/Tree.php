@@ -258,6 +258,29 @@ class Solution
         echo "res: ". $res. " node: " . $node->data . PHP_EOL;
         return $res;
     }
+
+    /**
+     * 有序数组建立二叉树(BST建立)
+     */
+    public function sortedArrayToBST($target)
+    {
+        return count($target) == 0 ? null : $this->buildTree($target, 0, count($target) - 1);
+    }
+
+    private function buildTree($target, $left, $right)
+    {
+        if ($left > $right) {
+            return null;
+        }
+        $mid = $left + (int) (($right - $left) / 2);
+        echo "left: ". $left . " right: ". $right ." index: ". $mid. " val ". $target[$mid].PHP_EOL;
+        $node = new tree($target[$mid]);
+        $node->left = $this->buildTree($target, $left, $mid - 1);
+        echo "processing right: ". $mid. " val ". $right.PHP_EOL;
+        $node->right = $this->buildTree($target, $mid + 1, $right);
+
+        return $node;
+    }
 }
 
 $slo = new Solution();
@@ -321,3 +344,10 @@ $vals = $slo->findMaxDepth($trees);
 print_r($vals);
 // print_r($levels);
 // print_r($slo->crossBST($trees));
+return;
+
+$target = [3, 5, 7, 10, 15, 18];
+$trees = $slo->sortedArrayToBST($target);
+list($vals, $levels) = $slo->loadBST($trees);
+print_r($vals);
+print_r($levels);
