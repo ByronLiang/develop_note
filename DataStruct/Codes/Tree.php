@@ -76,6 +76,8 @@ class tree
 class Solution
 {
     public $math = [];
+
+    public $res = [];
     /**
      * 
      * 计算二叉树路径节点的和满足目标数值(sum)
@@ -249,12 +251,15 @@ class Solution
         if ($node == null) {
             return 0;
         }
-        $leftNodeDepth = $this->findMaxDepth($node->left);
+        $leftNodeDepth = $this->findMinDepth($node->left);
         echo "left: ". $leftNodeDepth. " node: " . $node->data . PHP_EOL;
-        $rightNodeDepth = $this->findMaxDepth($node->right);
+        $rightNodeDepth = $this->findMinDepth($node->right);
         echo "right: ". $rightNodeDepth. " node: " . $node->data . PHP_EOL;
-        
-        $res = min($leftNodeDepth, $rightNodeDepth) + 1;
+        if ($node->left == null || $node->right == null) {
+            $res = $leftNodeDepth + $rightNodeDepth + 1;
+        } else {
+            $res = min($leftNodeDepth, $rightNodeDepth) + 1;
+        }
         echo "res: ". $res. " node: " . $node->data . PHP_EOL;
         return $res;
     }
@@ -280,6 +285,26 @@ class Solution
         $node->right = $this->buildTree($target, $mid + 1, $right);
 
         return $node;
+    }
+
+    public function printAllPath($root, &$path)
+    {
+        if ($root->left == null & $root->right == null) {
+            $path[] = $root->data;
+            $this->res[] = implode("->", $path);
+            array_pop($path);
+            return;
+        }
+        $path[] = $root->data;
+        echo "current: ". implode("->", $path).PHP_EOL;
+        if ($root->left != null) {
+            $this->printAllPath($root->left, $path);
+        }
+        if ($root->right != null) {
+            $this->printAllPath($root->right, $path);   
+        }
+        array_pop($path);
+        echo "finished processed: ". implode("->", $path).PHP_EOL;
     }
 }
 
@@ -341,9 +366,14 @@ $trees->right->right =  new tree(18);
 // list($vals, $levels) = $slo->loadBST($trees);
 // $vals = $slo->midBST($trees);
 $vals = $slo->findMaxDepth($trees);
-print_r($vals);
+echo "max-depth: ".$vals .PHP_EOL;
+$vals = $slo->findMinDepth($trees);
+echo "min-depth: ".$vals .PHP_EOL;
 // print_r($levels);
 // print_r($slo->crossBST($trees));
+$path = [];
+$slo->printAllPath($trees, $path);
+print_r($slo->res);
 return;
 
 $target = [3, 5, 7, 10, 15, 18];
