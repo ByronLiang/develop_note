@@ -8,6 +8,8 @@ import (
 
 func main()  {
     //tools.CasualTimeCount(10)
+    //tools.LockSample()
+    //tools.TimeNotify()
     DecoratorSample()
 }
 
