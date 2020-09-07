@@ -290,6 +290,74 @@ class SingleLinkedList
 
         return $temp->next;
     }
+
+    /**
+     * 链表输出倒数k位链表数据
+     */
+    public function findKthToTail($node, $k)
+    {
+        $overLength = false;
+        $temp = new Node(0);
+        $temp->next = $node;
+        $fast = $temp->next;
+        $slow = $temp;
+        while (--$k > 0) {
+            $fast = $fast->next;
+            if ($fast == null) {
+                $overLength = true;
+                break;
+            }
+            echo "filter: ". $fast->data.PHP_EOL;
+        }
+        // 超出链表长度
+        if ($overLength) {
+            return $node;
+        }
+        $slow = $node;
+        // 未超出链表长度 快慢指针 快指针比慢指针提前k位
+        while ($fast != null) {
+            $fast = $fast->next;
+            $slow = $slow->next;
+        }
+
+        return $slow;
+    }
+
+    /**
+     * 对倒数第k位链表进行移除操作
+     */
+    public function delKthToTail($node, $k)
+    {
+        $overLength = false;
+        $temp = new Node(0);
+        $newList = new Node(0);
+        $slow = $newList;
+        $temp->next = $node;
+        $fast = $temp->next;
+        // 提前k+1位置进行识别
+        while ($k-- > 0) {
+            $fast = $fast->next;
+            if ($fast == null) {
+                $overLength = true;
+                break;
+            }
+        }
+        // 超出链表长度
+        if ($overLength) {
+            return $node;
+        }
+        // 未超出链表长度 快慢指针 快指针比慢指针提前k位
+        while ($fast != null) {
+            $fast = $fast->next;
+            $slow->next = $node;
+            $slow = $slow->next;
+            $node = $node->next;
+        }
+        // 再k+1进行跨过k位进行拼接处理
+        $slow->next = $slow->next->next;
+
+        return $newList->next;
+    }
 }
 
 $fNodeList = new SingleLinkedList();
@@ -312,7 +380,8 @@ return;
 
 $singleLinkedList = new SingleLinkedList();
 
-$nodes = [2, 5, 5, 5, 8, 8, 10, 15];
+$nodes = [1, 3, 5, 8, 10, 11];
+// $nodes = [2, 5, 5, 5, 8, 8, 10, 15];
 foreach ($nodes as $value) {
     $node = new Node($value);
     $singleLinkedList->add($node);
@@ -333,6 +402,9 @@ $singleLinkedList->removeAllRepeatMap($singleLinkedList->header);
 // $node = $singleLinkedList->removeAllRepeated();
 $singleLinkedList->getAll($singleLinkedList->header);
 
+$res = $singleLinkedList->findKthToTail($singleLinkedList->header, 3);
+$res = $singleLinkedList->delKthToTail($singleLinkedList->header, 4);
+$singleLinkedList->getAll($res);
 // 闭环操作
 // $singleLinkedList->addCirclePoint(new Node(10), 5);
 // list($res, $fastNode) = $singleLinkedList->judgeCycle();
