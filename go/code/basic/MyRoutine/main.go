@@ -3,7 +3,7 @@ package main
 import "test/worker"
 
 func main() {
-    worker.BasicChan()
+    //worker.BasicChan()
     //worker.BlockSample()
     //worker.Blocking()
     //worker.NoneBlocking()
@@ -11,4 +11,5 @@ func main() {
     //worker.CreateBitNum()
     //worker.TimeTicker()
     //worker.ThreadExchange()
+    worker.CheckChanFullDemo()
 }

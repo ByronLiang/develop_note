@@ -197,3 +197,29 @@ func TimeTicker()  {
        }
     }
 }
+
+func CheckChanFullDemo() {
+    input := make(chan interface{}, 5)
+    input <- "one"
+    if checkChanIsFull(input, "two") {
+        fmt.Println("chan is full")
+    } else {
+        fmt.Println("chan is not full")
+        close(input)
+        for data := range input {
+            fmt.Println(data.(string))
+        }
+    }
+}
+
+/**
+利用select检测 缓冲通道是否已满
+ */
+func checkChanIsFull(input chan<- interface{}, data interface{}) bool {
+    select {
+    case input<-data:
+        return false
+    default:
+        return true
+    }
+}
