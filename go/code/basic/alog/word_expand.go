@@ -65,3 +65,15 @@ type pak struct {
     Storage     string
     Size        int
 }
+
+func CheckUnique(data string) bool {
+    bt := []byte(data)
+    for i := 0; i < len(bt); i++ {
+        res := strings.LastIndex(data, string(bt[i]))
+        //fmt.Println(res, string(bt[i]))
+        if res != i {
+            return false
+        }
+    }
+    return true
+}

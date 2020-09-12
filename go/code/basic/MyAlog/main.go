@@ -6,9 +6,10 @@ import (
 )
 
 func main()  {
-    byteExp()
+    //byteExp()
     //kmpTest()
     //search()
+    isUnique()
 }
 
 func kmpTest()  {
@@ -29,4 +30,12 @@ func search()  {
 
 func byteExp() {
     fmt.Println(alog.ByteExpand("abc1[a2[k]x2[mm]]zz"))
+}
+
+func isUnique()  {
+    if  ! alog.CheckUnique("letepo") {
+        fmt.Println("none unique")
+    } else {
+        fmt.Println("unique")
+    }
 }
