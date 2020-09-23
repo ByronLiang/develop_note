@@ -306,6 +306,28 @@ class Solution
         array_pop($path);
         echo "finished processed: ". implode("->", $path).PHP_EOL;
     }
+
+    /**
+     * 镜像二叉树
+     */
+    public function mirrorTree($node)
+    {
+        if ($node == null) {
+            return;
+        }
+        if ($node->left == null && $node->right == null) {
+            return;
+        }
+        $temp = $node->left;
+        $node->left = $node->right;
+        $node->right = $temp;
+        if ($node->left != null) {
+            $this->mirrorTree($node->left);
+        }
+        if ($node->right != null) {
+            $this->mirrorTree($node->right);
+        }
+    }
 }
 
 $slo = new Solution();
@@ -372,6 +394,8 @@ echo "min-depth: ".$vals .PHP_EOL;
 // print_r($levels);
 // print_r($slo->crossBST($trees));
 $path = [];
+// 镜像处理
+$slo->mirrorTree($trees);
 $slo->printAllPath($trees, $path);
 print_r($slo->res);
 return;
