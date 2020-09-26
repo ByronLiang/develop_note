@@ -1,0 +1,15 @@
+# This is the configuration file for the etcd server.
+
+# Human-readable name for this member.
+name: 'etc03'
+# Path to the data directory.
+data-dir: '/etc/etcd/cluster/data'
+wal-dir: '/etc/etcd/cluster/wal'
+listen-peer-urls: 'http://0.0.0.0:2380'
+listen-client-urls: 'http://0.0.0.0:2379'
+# listen-client-urls: 'http://192.168.31.79:2379,http://127.0.0.1:2379'
+initial-advertise-peer-urls: 'http://192.168.31.79:2380'
+advertise-client-urls: 'http://192.168.31.79:2379'
+initial-cluster-token: 'byron'
+initial-cluster: 'etc01=http://192.168.31.87:2380,etc02=http://192.168.31.225:2380,etc03=http://192.168.31.79:2380'
+initial-cluster-state: new

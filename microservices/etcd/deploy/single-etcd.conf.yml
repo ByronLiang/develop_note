@@ -1,0 +1,5 @@
+name: 'single-etcd'
+# Path to the data directory.
+data-dir: '/etc/etcd/data'
+wal-dir: '/etc/etcd/wal'
+listen-client-urls: 'http://192.168.31.79:2379,http://localhost:2379'
