@@ -9,7 +9,8 @@ func main()  {
     //byteExp()
     //kmpTest()
     //search()
-    isUnique()
+    //isUnique()
+    backspace()
 }
 
 func kmpTest()  {
@@ -37,5 +38,13 @@ func isUnique()  {
         fmt.Println("none unique")
     } else {
         fmt.Println("unique")
+    }
+}
+
+func backspace() {
+    if alog.BackspaceCompare("#csl#", "#csl#") {
+        fmt.Println("match")
+    } else {
+        fmt.Println("failed")
     }
 }
