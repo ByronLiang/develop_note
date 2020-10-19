@@ -73,12 +73,14 @@ class SortHelper
     protected function repFind($target, $left, $right)
     {
         if ($left > $right) {
-            return false;
+            // 无法匹配, 返回它将会被按顺序插入的位置
+            return [false, $left];
         }
         $mid = $left + (int) (($right - $left) / 2);
         // $mid = (int) (($right + $left) / 2);
         if ($this->sortedArray[$mid] === $target) {
-            return $mid;
+            // 完全匹配
+            return [$mid, false];
         }
         if ($this->sortedArray[$mid] > $target) {
             // 向左缩小范围
@@ -203,4 +205,4 @@ $data = $obj->bindSort($arr);
 $obj->sortedArray = $data;
 $res = $obj->find(7);
 print_r($data);
-print_r($res);
+print_r([$res, $newIndex]);
