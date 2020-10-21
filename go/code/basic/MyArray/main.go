@@ -23,11 +23,12 @@ func main()  {
     //res := worker.WindowMax([]int{1,13,3,2,8,4}, 3)
     //fmt.Println(res)
     //worker.NullSlice()
-    testRemoveIndexData(1)
+    //testRemoveIndexData(1)
     //worker.CopySlice()
     //worker.ModifiedSlice()
     //worker.RoundNum(5)
     //worker.PrintRoundNum(5)
+    worker.ModifiedSlice()
 }
 
 func CopyArray(target [3]int, pointTarget *[3]int)  {

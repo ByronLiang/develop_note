@@ -2,6 +2,8 @@ package worker
 
 import (
     "fmt"
+    "sort"
+    "unicode/utf8"
 )
 
 func BasicInit()  {
@@ -170,33 +172,39 @@ func CopySlice()  {
 
 func ModifiedSlice() {
     //确保append扩容不会溢出
-    //a := make([]int, 3, 4)
-    //a[0] = 7
-    //a[1] = 8
-    //a[2] = 9
-    a := []int{7, 8, 9}
+    //a := make([]string, 3, 4)
+    //a[0] = "apple"
+    //a[1] = "toy"
+    //a[2] = "football"
+    a := []string{"apple", "toy", "football"}
+    tar := make([]string, len(a))
     txt := "abc"
     fmt.Printf("len: %d cap: %d data: %+v add: %p \n", len(a), cap(a), a, a)
     fmt.Printf("txt add %p \n", &txt)
+    copy(tar, a)
+    sortWithTextLength(tar)
+    // 切片默认实现值传递 (在不被append操作情况下，内存地址不变)
+    changeWithoutAppend(a)
+    //fmt.Println(a)
     // 值传递 地址操作仍受影响 append 操作不影响
-    upgrade(a, txt)
+    //upgrade(a, txt)
     // 引用传递 影响append
-    change(&a)
+    //change(&a)
     fmt.Printf("len: %d cap: %d data: %+v add: %p \n", len(a), cap(a), a, a)
-    fmt.Println(a, txt)
+    fmt.Println(a, txt, tar)
 }
 
-func upgrade(a []int, txt string) {
+func upgrade(a []string, txt string) {
     // 函数内开辟新地址 存储形参的值(值传递) 没有传递内存地址
     txt = "qq"
     fmt.Printf("upgrading add: %p, txt add %p \n", a, &txt)
-    // 形参类型未切片 函数里进行地址传递
+    // 形参类型为切片 函数里进行地址传递
     // 对内存地址的操作 会影响外部的数据
-    a[0] = 1
+    a[0] = "banana"
     // 不影响函数外的值 即便内存地址相同
     // 在函数内，append操作超过了原始切片的容量，将会有一个新建底层数组的过程
     // 那么此时再修改函数返回切片，应该不会再影响原始切片
-    a = append(a, 10)
+    a = append(a, "music")
     fmt.Printf("finished upgrade add: %p \n", a)
     fmt.Println(a)
 }
@@ -204,15 +212,29 @@ func upgrade(a []int, txt string) {
 /**
 值传递
  */
-func change(a *[]int) {
+func change(a *[]string) {
     fmt.Printf("upgrading add: %p \n", a)
     // 形参传递切片 函数里进行引用传递
     // 对内存地址的操作 会影响外部的数据
-    (*a)[0] = 1
+    (*a)[0] = "banana"
     //不影响函数外的值 即便内存地址相同
     // 在函数内，append操作超过了原始切片的容量，将会有一个新建底层数组的过程
     // 那么此时再修改函数返回切片，应该不会再影响原始切片
-    *a = append(*a, 10)
+    *a = append(*a, "music")
     fmt.Printf("finished upgrade add: %p \n", a)
     fmt.Println(a)
+}
+
+func changeWithoutAppend(tar []string)  {
+    // 形参类型为切片 函数里进行地址传递
+    // 对内存地址的操作 会影响外部的数据
+    tar[0] = "banana"
+    fmt.Printf("none chang with add: %p\n", tar)
+}
+
+func sortWithTextLength(tar []string) {
+    sort.SliceStable(tar, func(i, j int) bool {
+        // 按照字符串长度降序
+        return utf8.RuneCountInString(tar[i]) > utf8.RuneCountInString(tar[j])
+    })
 }
