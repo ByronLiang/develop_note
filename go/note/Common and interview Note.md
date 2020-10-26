@@ -1,0 +1,127 @@
+# 日常开发问题/面试笔记
+
+## 简单记录
+
+1. 函数里不支持默认参数或可选参数
+
+2. 表示枚举值(enums) `const 常量 ioat 常量自增计数器 组合`
+
+## 针对切片数据结构比较是否相同
+
+1. 若数据类型是`[]byte` 可以使用`bytes.Equal`;
+
+2. `reflect.DeepEqual()` 低效地进行数据比较(适用数据量不大)
+
+3. 遍历两者数据内容, 得出一致性结果
+
+## 空 struct{} 的用途
+
+`struct{}` 无需消耗内存
+
+```go
+set := make(map[string]struct{})
+for _, value := range []string{"apple", "orange", "apple"} {
+    // 节省内存
+   set[value] = struct{}{}
+}
+fmt.Println(set)
+// Output: map[orange:{} apple:{}]
+```
+
+## 函数返回局部变量/逃逸分析
+
+Go编译器会自动决定把一个变量放在栈还是放在堆，编译器会做逃逸分析(escape analysis)；
+当发现变量的作用域没有跑出函数范围，就可以在栈上，反之则必须分配在堆。
+
+```go
+func fun() *int {    // int类型指针函数
+    var tmp := 1
+    return &tmp      // 返回局部变量tmp的地址
+}
+
+func main() {
+    var p *int
+    p = fun()
+    fmt.Printf("%d\n", *p) // 返回变量V的值1
+}
+```
+
+### 背景
+
+堆用于动态内存分配，与栈不同，程序需要使用指针在堆中查找数据
+
+页堆: 存储动态数据，最大的内存块, GC(垃圾回收)扫描/标记/回收的地方
+    - 驻留内存(resident set)被划分为每个大小为8KB的页，并由一个全局mheap对象管理
+
+栈存储区: 每个Goroutine（G）有一个栈。在这里存储了静态数据，包括函数栈帧，静态结构，原生类型值和指向动态结构的指针
+    - 许多对象直接在程序栈上分配, 避免处于垃圾回收的堆内存里
+
+### 程序执行流程
+
+```go
+package main
+
+import "fmt"
+
+type Employee struct {
+    name   string
+    salary int
+    sales  int
+    bonus  int
+}
+
+const BONUS_PERCENTAGE = 10
+
+func getBonusPercentage(salary int) int {
+    percentage := (salary * BONUS_PERCENTAGE) / 100
+    return percentage
+}
+
+func findEmployeeBonus(salary, noOfSales int) int {
+    bonusPercentage := getBonusPercentage(salary)
+    bonus := bonusPercentage * noOfSales
+    return bonus
+}
+
+func main() {
+    var john = Employee{"John", 5000, 5, 0}
+    john.bonus = findEmployeeBonus(john.salary, john.sales)
+    fmt.Println(john.bonus)
+}
+```
+
+```
+main函数被保存栈中的"main栈帧"中
+
+每个函数调用都作为一个栈帧块被添加到栈中
+
+包括参数和返回值在内的所有静态变量都保存在函数的栈帧块内
+
+无论类型如何，所有静态值都直接存储在栈中。这也适用于全局范畴
+
+所有动态类型都在堆上创建，并且被栈上的指针所引用。小于32Kb的对象由P的mcache分配。这同样适用于全局范畴
+
+具有静态数据的结构体保留在栈上，直到在该位置将任何动态值添加到该结构中为止。该结构被移到堆上。
+
+从当前函数调用的函数被推入堆顶部
+
+当函数返回时，其栈帧将从栈中删除
+
+一旦主过程(main)完成，堆上的对象将不再具有来自Stack的指针的引用，并成为孤立对象
+```
+
+
+### 代码优化gc
+
+1. 减少对象分配；尽量做到，对象的重用
+
+```go
+// 没有注入形参 每次开辟新的切片返回数据
+func(r *Reader)Read() ([]byte, error)
+// 复用原形参地址内存 避免开辟/回收临时的地址内存数据
+func(r *Reader)Read(tar []byte) (int, error)
+```
+
+2. 不使用+拼接string 由于采用+来进行string的连接会生成新的对象，降低gc的效率;
+
+3. append操作：正确预估数组的长度的话，最初分配空间做好空间规划操作，有效降低gc的压力，提升代码的效率
