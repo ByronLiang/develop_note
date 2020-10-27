@@ -10,7 +10,9 @@ func main()  {
     //kmpTest()
     //search()
     //isUnique()
-    backspace()
+    //backspace()
+    //linkList()
+    numbersThanCurrent()
 }
 
 func kmpTest()  {
@@ -47,4 +49,16 @@ func backspace() {
     } else {
         fmt.Println("failed")
     }
+}
+
+func linkList()  {
+    node := alog.InitListNode()
+    alog.ShowListNode(node)
+    alog.IsPalindrome(node)
+}
+
+// 计数排序算法: 得出当前排名数值
+func numbersThanCurrent() {
+    fmt.Println(
+        alog.SmallerNumbersThanCurrent([]int{4, 4, 2, 4}))
 }
