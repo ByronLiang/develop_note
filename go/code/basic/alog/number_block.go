@@ -1,5 +1,7 @@
 package alog
 
+import "fmt"
+
 func SmallerNumbersThanCurrent(nums []int) []int {
     var (
         max = 0
@@ -23,4 +25,24 @@ func SmallerNumbersThanCurrent(nums []int) []int {
         nums[index] = data[1][num]
     }
     return nums
+}
+
+/**
+https://leetcode-cn.com/problems/unique-number-of-occurrences/
+ */
+func UniqueOccurrences(arr []int) bool {
+    var temp, storage = make(map[int]int), make(map[int]struct{})
+    for _, num := range arr {
+       temp[num]++
+    }
+    for _, val := range temp {
+       if _, ok := storage[val]; ok{
+           fmt.Println("none match")
+           return false
+       } else {
+           storage[val] = struct {}{}
+       }
+    }
+    fmt.Println("success")
+    return true
 }

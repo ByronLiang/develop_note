@@ -10,7 +10,8 @@ func main()  {
     //tools.CasualTimeCount(10)
     //tools.LockSample()
     //tools.TimeNotify()
-    DecoratorSample()
+    hostSample()
+    //DecoratorSample()
 }
 
 func DecoratorSample()  {
@@ -30,4 +31,10 @@ func douFoo(a, b, c int) int {
 func foo(a, b, c int) int {
     fmt.Printf("%d, %d, %d \n", a, b, c)
     return a + b + c
+}
+
+func hostSample() {
+    //fmt.Println(tools.GetLocalHost())
+    fmt.Println(tools.IpWithNames())
+    fmt.Println(tools.FindIpByName("eth1"))
 }

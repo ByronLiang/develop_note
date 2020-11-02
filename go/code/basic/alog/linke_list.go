@@ -1,19 +1,21 @@
 package alog
 
-import "fmt"
+import (
+    "fmt"
+)
 
 type ListNode struct {
     Val int
     Next *ListNode
 }
 
-func InitListNode() *ListNode {
+func InitListNode(init []int) *ListNode {
     head := &ListNode{
         Val: 1,
         Next: nil,
     }
     temp := head
-    for _, val := range []int{2,2,1} {
+    for _, val := range init {
         temp.Next = &ListNode{
             Val: val,
             Next: nil,
@@ -71,4 +73,32 @@ func IsPalindrome(head *ListNode) bool {
         slow = slow.Next
     }
     return true
+}
+
+/**
+https://leetcode-cn.com/problems/swap-nodes-in-pairs/submissions/
+ */
+func SwapPairs(head *ListNode) *ListNode {
+    NewNode := &ListNode{
+        Val: 0,
+        Next: nil,
+    }
+    NewNode.Next = head
+    current := NewNode
+    //if current.Next == nil {
+    //    return nil
+    //}
+    //if current.Next.Next == nil {
+    //    return current.Next
+    //}
+    for current.Next != nil && current.Next.Next != nil {
+        start := current.Next
+        end := current.Next.Next
+        // 将NewNode节点拼接起来
+        current.Next = end
+        start.Next = end.Next
+        end.Next = start
+        current = start
+    }
+    return NewNode.Next
 }

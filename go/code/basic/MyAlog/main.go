@@ -11,8 +11,10 @@ func main()  {
     //search()
     //isUnique()
     //backspace()
-    //linkList()
-    numbersThanCurrent()
+    linkList()
+    //numbersThanCurrent()
+    //uniqueOccurrences()
+    //sumNumbers()
 }
 
 func kmpTest()  {
@@ -52,13 +54,29 @@ func backspace() {
 }
 
 func linkList()  {
-    node := alog.InitListNode()
+    //node := alog.InitListNode([]int{2,2,1})
+    node := alog.InitListNode([]int{2,3,4})
     alog.ShowListNode(node)
-    alog.IsPalindrome(node)
+    //alog.IsPalindrome(node)
+    newNode := alog.SwapPairs(node)
+    alog.ShowListNode(newNode)
 }
 
 // 计数排序算法: 得出当前排名数值
 func numbersThanCurrent() {
     fmt.Println(
         alog.SmallerNumbersThanCurrent([]int{4, 4, 2, 4}))
+}
+
+func uniqueOccurrences() {
+    alog.UniqueOccurrences([]int{1,2})
+}
+/**
+https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/submissions/
+ */
+func sumNumbers() int {
+    root := alog.InitTreeData()
+    amount := alog.SumNumbers(root)
+    fmt.Println(amount)
+    return amount
 }
