@@ -4,13 +4,18 @@
 
 - https协议流程
 
-1. https的加密层(SSL/TLS)位于http层和tcp层；对于客户端(发送端)，把http的内容加密送到下层的TCP; 对于服务端(接收端)，负责将TCP送来的数据解密还原成http内容
+1. https的加密层(SSL/TLS)位于http层和tcp层；对于客户端(发送端)，把http的内容加密送到下层的TCP; 对于服务端(接收端)，负责将TCP送来的数据解密还原成http内容;
 
-2. 抓包工具在http层捕获的数据是明文；https不是对http报文进行加密，而是对业务数据进行加密，然后用http传输；
+2. HTTPS在传输数据之前需要客户端(浏览器)与服务端之间进行一次握手，将确立双方加密传输数据的密码信息;
+目的是为了保证双方都获得了一致的密码，并且可以正常的加密解密数据，为后续真正数据的传输做一次测试
 
-3. 抓包工具放置在两段https通道上是能拦截到明文数据
+3. 抓包工具在http层捕获的数据是明文；https不是对http报文进行加密，而是对业务数据进行加密，然后用http传输；
+
+4. 抓包工具放置在两段https通道上是能拦截到明文数据
 
 - 加密传输层
+
+TLS/SSL中使用了非对称加密，对称加密以及HASH算法
 
 1. SSL（Secure Socket Layer，安全套接字层) SSL 协议位于 TCP/IP 协议与各种应用层协议之间，为数据通讯提供安全支持。
 2. TLS（Transport Layer Security，传输层安全）
@@ -24,7 +29,7 @@
 ### 接口数据传输加密方案：OpenSSL AES-128-CBC
 
 ```php
-<!-- 保存生成的key 与 iv 密匙 用作客户端数据加密处理, 服务端解密处理 -->
+<!-- 保存生成的key 与 iv 密匙 用作客户端数据加密处理, 服务端解密处理 -->
 $key = bin2hex(openssl_random_pseudo_bytes(8));
 $iv = bin2hex(openssl_random_pseudo_bytes(8));
 $encrypted = openssl_encrypt('hello world', 'aes-128-cbc', $key, 0, $iv);
