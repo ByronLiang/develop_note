@@ -2,6 +2,7 @@ package worker
 
 import (
     "fmt"
+    "sync"
     "time"
 )
 
@@ -221,5 +222,47 @@ func checkChanIsFull(input chan<- interface{}, data interface{}) bool {
         return false
     default:
         return true
+    }
+}
+
+func CloseSign()  {
+    defer func() {
+       if err := recover(); err != nil {
+           fmt.Println(err.(string))
+       }
+    }()
+    var wg sync.WaitGroup
+    wg.Add(1)
+    data, done := make(chan int), make(chan struct{})
+    go watchSign(data, done, &wg)
+    data<-10
+    data<-1
+    close(data)
+    done<- struct{}{}
+    // 对chan仍会发出信号
+    close(done)
+    //panic("abc")
+    wg.Wait()
+    fmt.Println("end")
+}
+
+func watchSign(data <-chan int, done <-chan struct{}, wg *sync.WaitGroup)  {
+    defer func() {
+        wg.Done()
+    }()
+    for {
+        select {
+        case res, ok := <-data:
+            if ok {
+                fmt.Println(res)
+            }
+        case _, ok := <-done:
+            if ok {
+                fmt.Println("receive")
+            } else {
+                fmt.Println("done handle")
+                return
+            }
+        }
     }
 }

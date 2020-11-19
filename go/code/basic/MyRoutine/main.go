@@ -11,5 +11,6 @@ func main() {
     //worker.CreateBitNum()
     //worker.TimeTicker()
     //worker.ThreadExchange()
-    worker.CheckChanFullDemo()
+    //worker.CheckChanFullDemo()
+    worker.CloseSign()
 }

@@ -46,3 +46,35 @@ func UniqueOccurrences(arr []int) bool {
     fmt.Println("success")
     return true
 }
+
+func ValidMountainArray(A []int) bool {
+    length := len(A)
+    if length < 3 {
+        return false
+    }
+    i, j := 0, length- 1
+    l, r := 0, 0
+    for i < j {
+        if A[i] < A[i+1] {
+            i++
+        } else if A[i] == A[i+1] {
+            return false
+        } else {
+            l = i
+            if r != 0 {
+                return l == r
+            }
+        }
+        if A[j] < A[j-1] {
+            j--
+        } else if A[j] == A[j-1] {
+            return false
+        } else {
+            r = j
+            if l != 0 {
+                return r == l
+            }
+        }
+    }
+    return i > 0 && j < length -1 && i == j
+}

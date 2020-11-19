@@ -11,9 +11,9 @@ func main()  {
     //search()
     //isUnique()
     //backspace()
-    linkList()
+    //linkList()
     //numbersThanCurrent()
-    //uniqueOccurrences()
+    uniqueOccurrences()
     //sumNumbers()
 }
 
@@ -69,7 +69,12 @@ func numbersThanCurrent() {
 }
 
 func uniqueOccurrences() {
-    alog.UniqueOccurrences([]int{1,2})
+    //alog.UniqueOccurrences([]int{1,2})
+    if alog.ValidMountainArray([]int{0,1,2,3,4,5,6,7,8,9}) {
+        fmt.Println("match")
+    } else {
+        fmt.Println("none")
+    }
 }
 /**
 https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/submissions/
