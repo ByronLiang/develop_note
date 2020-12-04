@@ -42,10 +42,12 @@ func hostSample() {
 
 func genCodeExample()  {
     gen := tools.CodeGen{
-       InitCode:   "700100",
-       NumSize:    3,
+       InitCode:   27995,
+       NumSize:    1000,
        PrefixSize: 2,
     }
+    fmt.Println(gen.GenTotalCode(10))
+    fmt.Println(gen.GenTotalCode(10))
     fmt.Println(gen.ReflectCode())
     fmt.Println(gen.GenCodeNum("AAA"))
 }
