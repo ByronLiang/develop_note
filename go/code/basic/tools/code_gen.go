@@ -11,22 +11,24 @@ https://leetcode-cn.com/problems/excel-sheet-column-title/
 
 type CodeGen struct {
     InitCode    int
-    // 数字后缀长度
+    // 数字后缀长度转换
     NumSize     int
     // 字母前缀
     PrefixSize  int
+    // 数字后缀字符长度
+    NumLength   int
 }
 
 func (cg *CodeGen) ReflectCode() string {
     n := cg.InitCode / cg.NumSize
-    prefix := genPrefix(n, cg.PrefixSize)
+    prefix := cg.genPrefix(n)
 
     return fmt.Sprintf("%s%s", prefix, strconv.Itoa(cg.InitCode % cg.NumSize))
 }
 
-func genPrefix(code, length int) string {
-    prefixByte := make([]rune, length)
-    index := length - 1
+func (cg *CodeGen) genPrefix(code int) string {
+    prefixByte := make([]rune, cg.PrefixSize)
+    index := cg.PrefixSize - 1
     for code > 0 {
         m := code % 26
         if m == 0 {
@@ -41,20 +43,19 @@ func genPrefix(code, length int) string {
 }
 
 func (cg *CodeGen) GenTotalCode(total int) []string {
+    var codeIndex = cg.InitCode
+    cg.InitCode += total
     data := make([]string, 0, total)
-    lastCode := cg.InitCode + total
-    initPrefix := cg.InitCode / cg.NumSize
-    initNum := cg.InitCode % cg.NumSize
-    prefix := genPrefix(initPrefix, cg.PrefixSize)
-    cg.InitCode = lastCode
+    initPrefix := codeIndex / cg.NumSize
+    initNum := codeIndex % cg.NumSize
+    prefix := cg.genPrefix(initPrefix)
     for i := 0; i < total; i++ {
-        //num, _ := fmt.Printf("%0*d", 3, initNum)
-        code := fmt.Sprintf("%s%d", prefix, initNum)
+        code := fmt.Sprintf("%s%0*d", prefix, cg.NumLength, initNum)
         data = append(data, code)
         if initNum == 999 {
             initPrefix += 1
             initNum = 0
-            prefix = genPrefix(initPrefix, cg.PrefixSize)
+            prefix = cg.genPrefix(initPrefix)
         } else {
             initNum ++
         }
