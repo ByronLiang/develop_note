@@ -10,8 +10,9 @@ func main()  {
     //tools.CasualTimeCount(10)
     //tools.LockSample()
     //tools.TimeNotify()
-    hostSample()
+    //hostSample()
     //DecoratorSample()
+    genCodeExample()
 }
 
 func DecoratorSample()  {
@@ -37,4 +38,14 @@ func hostSample() {
     //fmt.Println(tools.GetLocalHost())
     fmt.Println(tools.IpWithNames())
     fmt.Println(tools.FindIpByName("eth1"))
+}
+
+func genCodeExample()  {
+    gen := tools.CodeGen{
+       InitCode:   "700100",
+       NumSize:    3,
+       PrefixSize: 2,
+    }
+    fmt.Println(gen.ReflectCode())
+    fmt.Println(gen.GenCodeNum("AAA"))
 }
