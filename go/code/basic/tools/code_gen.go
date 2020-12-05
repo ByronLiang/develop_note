@@ -3,6 +3,7 @@ package tools
 import (
     "fmt"
     "strconv"
+    "sync"
 )
 
 /**
@@ -10,20 +11,31 @@ https://leetcode-cn.com/problems/excel-sheet-column-title/
  */
 
 type CodeGen struct {
+    mu sync.Mutex
     InitCode    int
     // 数字后缀长度转换
-    NumSize     int
+    numWeight int
     // 字母前缀
     PrefixSize  int
     // 数字后缀字符长度
     NumLength   int
 }
 
+func NewCodeGen(code, prefixSize, numberLength int) *CodeGen {
+    cg := &CodeGen{
+        InitCode:   code,
+        PrefixSize: prefixSize,
+        NumLength:  numberLength,
+    }
+    cg.initNumWeight()
+    return cg
+}
+
 func (cg *CodeGen) ReflectCode() string {
-    n := cg.InitCode / cg.NumSize
+    n := cg.InitCode / cg.numWeight
     prefix := cg.genPrefix(n)
 
-    return fmt.Sprintf("%s%s", prefix, strconv.Itoa(cg.InitCode % cg.NumSize))
+    return fmt.Sprintf("%s%s", prefix, strconv.Itoa(cg.InitCode % cg.numWeight))
 }
 
 func (cg *CodeGen) genPrefix(code int) string {
@@ -43,11 +55,15 @@ func (cg *CodeGen) genPrefix(code int) string {
 }
 
 func (cg *CodeGen) GenTotalCode(total int) []string {
+    cg.mu.Lock()
     var codeIndex = cg.InitCode
+    // 测试协程调度-共享内存并发竞争数据不一致
+    //runtime.Gosched()
     cg.InitCode += total
+    cg.mu.Unlock()
     data := make([]string, 0, total)
-    initPrefix := codeIndex / cg.NumSize
-    initNum := codeIndex % cg.NumSize
+    initPrefix := codeIndex / cg.numWeight
+    initNum := codeIndex % cg.numWeight
     prefix := cg.genPrefix(initPrefix)
     for i := 0; i < total; i++ {
         code := fmt.Sprintf("%s%0*d", prefix, cg.NumLength, initNum)
@@ -70,4 +86,12 @@ func (cg *CodeGen) GenCodeNum(code string) int {
         ret = 26 * ret + (int(c-'A') + 1)
     }
     return ret
+}
+
+func (cg *CodeGen) initNumWeight() {
+    weight := 1
+    for i := 0; i < cg.NumLength; i++ {
+        weight *= 10
+    }
+    cg.numWeight = weight
 }

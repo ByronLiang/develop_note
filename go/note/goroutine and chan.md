@@ -4,6 +4,16 @@
 
 一个环形队列和两个链表展开
 
+等待队列使用双向链表，存储了当前 Channel 由于缓冲区空间不足而阻塞的 Goroutine 列表
+
+### chan 收发规则
+
+Channel 收发操作均遵循了先入先出（FIFO）的设计
+
+1. 先从 Channel 读取数据的 Goroutine 会先接收到数据
+
+2. 先向 Channel 发送数据的 Goroutine 会得到先发送数据的权利
+
 ## chan关闭后相关操作现象
 
 1. 写操作: 会引发异常

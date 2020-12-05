@@ -3,6 +3,9 @@ package main
 import (
     "fmt"
     "log"
+    "sync"
+    "time"
+
     "test/tools"
 )
 
@@ -41,14 +44,19 @@ func hostSample() {
 }
 
 func genCodeExample()  {
-    gen := tools.CodeGen{
-       InitCode:   27995,
-       NumSize:    1000,
-       PrefixSize: 2,
-       NumLength: 3,
-    }
-    fmt.Println(gen.GenTotalCode(10))
-    fmt.Println(gen.GenTotalCode(10))
+    gen := tools.NewCodeGen(27995, 2, 3)
+    var wg sync.WaitGroup
+    wg.Add(2)
+    go genCodeWithRoutine(&wg, 1, 10, gen)
+    go genCodeWithRoutine(&wg, 2, 5, gen)
+    wg.Wait()
+    time.Sleep(500 * time.Millisecond)
     fmt.Println(gen.ReflectCode())
     fmt.Println(gen.GenCodeNum("ZZZ"))
+}
+
+func genCodeWithRoutine(wg *sync.WaitGroup, index, total int, gen *tools.CodeGen)  {
+    defer wg.Done()
+    fmt.Println(index, gen.GenTotalCode(total))
+    time.Sleep(500 * time.Millisecond)
 }
