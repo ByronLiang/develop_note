@@ -15,3 +15,8 @@
 - CGO_ENABLED=0的情况下，Go采用纯静态编译；若进行跨平台编译, 一般需要设置`CGO_ENABLED=0` 不依赖任何c, lib等外部动态链接库 
 
 - 如果CGO_ENABLED=1，但依然要强制静态编译，需传递-linkmode=external给cmd/link
+
+
+### 检测数据竞争
+
+`go run --race / go build --race`

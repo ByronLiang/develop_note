@@ -5,6 +5,7 @@ import (
     "image/color"
     "log"
     "reflect"
+    "test/extra"
     "test/tools"
     "unsafe"
 )
@@ -159,5 +160,22 @@ func MethodStruct()  {
     // 即其需要用第一个额外参数指定接收器，后面排列Distance方法的参数。
     mm(c, &c.Point)
     kk(c, &c.Point)
+}
+
+func CopyWithStruct()  {
+    cat := extra.Cat{
+        Name:  "jimmy",
+        Age:   10,
+        Hobby: []string{"fish"},
+    }
+    var tom extra.Cat
+    // 浅拷贝
+    //tom = cat
+    // 深拷贝
+    _ = tools.DeepCopy(&tom, cat)
+    //即以浅拷贝, 因被赋予全新地址, 此写法不会修改原对象值
+    //tom.Hobby = []string{"sleep"}
+    tom.Hobby[0] = "sleep"
+    fmt.Printf("tom: %v, cat: %v", tom, cat)
 }
 

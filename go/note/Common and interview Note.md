@@ -133,3 +133,55 @@ func(r *Reader)Read(tar []byte) (int, error)
 2. golang的map底层使用hash表实现，插入数据位置是随机的，所以遍历过程中新插入的数据不能保证遍历到;
 
 3. 读取过程: 提前取一个随机数，把桶的遍历顺序随机化
+
+### 浅拷贝与深拷贝
+
+1. 若拷贝对象是struct, 成员有Slice/Map数据类型, 浅拷贝下, 对这类成员进行数据变更(非赋予新slice/Map), 会影响原对象
+
+2. 若使用深拷贝, 拷贝对象与被拷贝对象不会互相影响; 拷贝的对象中没有引用类型，只需浅拷贝即可
+
+### defer相关问题
+
+```go
+defer func() {
+    // do A 
+}()
+
+defer func() {
+    // panic("B") 
+}()
+
+defer func() {
+    // do C 
+}()
+
+// 执行顺序 do C -> do A -> panic B
+
+```
+
+defer是后进先出顺序下；defer里发生panic, 优先将正常defer方法执行完, 最后再处理发生panic的defer方法
+
+### 切片扩容
+
+源码: `runtime/slice.go  growslice方法`
+
+```go
+newcap := old.cap
+doublecap := newcap + newcap
+if old.len < 1024 {
+    newcap = doublecap
+} else {
+    // Check 0 < newcap to detect overflow
+    // and prevent an infinite loop.
+    for 0 < newcap && newcap < cap {
+        newcap += newcap / 4
+    }
+    // Set newcap to the requested cap when
+    // the newcap calculation overflowed.
+    if newcap <= 0 {
+        newcap = cap
+    }
+}
+```
+
+结论: slice的长度在超过一个阈值(1024)后便不再翻倍，而是每次以25%的幅度增长，直到满足所需的容量。
