@@ -12,5 +12,6 @@ func main() {
     //worker.TimeTicker()
     //worker.ThreadExchange()
     //worker.CheckChanFullDemo()
-    worker.CloseSign()
+    //worker.CloseSign()
+    worker.VerifyChanClose()
 }

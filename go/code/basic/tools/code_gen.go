@@ -54,6 +54,18 @@ func (cg *CodeGen) genPrefix(code int) string {
     return string(prefixByte)
 }
 
+func (cg *CodeGen) GenCode() string {
+    cg.mu.Lock()
+    var codeIndex = cg.InitCode
+    cg.InitCode += 1
+    cg.mu.Unlock()
+    initPrefix := codeIndex / cg.numWeight
+    initNum := codeIndex % cg.numWeight
+    prefix := cg.genPrefix(initPrefix)
+
+    return fmt.Sprintf("%s%0*d", prefix, cg.NumLength, initNum)
+}
+
 func (cg *CodeGen) GenTotalCode(total int) []string {
     cg.mu.Lock()
     var codeIndex = cg.InitCode

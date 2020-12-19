@@ -45,12 +45,16 @@ func hostSample() {
 
 func genCodeExample()  {
     gen := tools.NewCodeGen(27995, 2, 3)
+    fmt.Println("first: ", gen.GenCode())
+    fmt.Println("second: ", gen.GenCode())
+
     var wg sync.WaitGroup
     wg.Add(2)
     go genCodeWithRoutine(&wg, 1, 10, gen)
     go genCodeWithRoutine(&wg, 2, 5, gen)
     wg.Wait()
     time.Sleep(500 * time.Millisecond)
+
     fmt.Println(gen.ReflectCode())
     fmt.Println(gen.GenCodeNum("ZZZ"))
 }

@@ -266,3 +266,24 @@ func watchSign(data <-chan int, done <-chan struct{}, wg *sync.WaitGroup)  {
         }
     }
 }
+
+func VerifyChanClose() {
+    demo := make(chan struct{})
+    fmt.Println(verifyChan(demo))
+    close(demo)
+    // 关闭chan, 每次在select里都会进入输出语句里
+    fmt.Println(verifyChan(demo))
+    // 将chan设置为nil 读写都阻塞; 避免进入select的输出语句里
+    demo = nil
+    fmt.Println(verifyChan(demo))
+}
+
+func verifyChan(c chan struct{}) (isClose bool) {
+    select {
+    case _, open := <- c:
+        isClose = !open
+    default:
+        isClose = false
+    }
+    return
+}

@@ -1,1 +1,9 @@
-package example
+package main
+
+import (
+    "test/pattern/fan"
+)
+
+func main()  {
+    fan.New()
+}
