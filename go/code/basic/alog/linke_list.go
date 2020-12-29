@@ -102,3 +102,20 @@ func SwapPairs(head *ListNode) *ListNode {
     }
     return NewNode.Next
 }
+
+/**
+https://leetcode-cn.com/problems/remove-linked-list-elements/submissions/
+ */
+func RemoveElements(head *ListNode, target int) {
+    for head != nil && head.Val == target {
+        head = head.Next
+    }
+    current := head
+    for current != nil && current.Next != nil {
+        if current.Next.Val == target {
+            current.Next = current.Next.Next
+        } else {
+            current = current.Next
+        }
+    }
+}

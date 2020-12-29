@@ -5,5 +5,6 @@ import (
 )
 
 func main()  {
-    fan.New()
+    //fan.New()
+    fan.NewPip()
 }

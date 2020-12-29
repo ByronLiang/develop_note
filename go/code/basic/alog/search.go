@@ -1,5 +1,7 @@
 package alog
 
+import "fmt"
+
 func SearchInsert(data []int, target int) int {
     var (
         l = 0
@@ -104,4 +106,21 @@ func rightSearch(data []int, target int) int {
         return -1
     }
     return r
+}
+
+/**
+https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof/
+ */
+func MinArray(data []int) int {
+    l, r := 0, len(data) - 1
+    for l < r {
+        mid := l + (r - l) >> 1
+        if data[mid] > data[r] {
+            l = mid + 1
+        } else {
+            r = r - 1
+        }
+        fmt.Println(l, r)
+    }
+    return data[l]
 }
