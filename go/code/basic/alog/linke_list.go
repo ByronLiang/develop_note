@@ -119,3 +119,29 @@ func RemoveElements(head *ListNode, target int) {
         }
     }
 }
+
+func Partition(head *ListNode, x int) *ListNode {
+    ltNode, geNode := &ListNode{
+        Val:  0,
+        Next: nil,
+    }, &ListNode{
+        Val:  0,
+        Next: nil,
+    }
+    lt := ltNode
+    ge := geNode
+    for head != nil  {
+        if head.Val < x {
+            lt.Next = head
+            lt = lt.Next
+        }
+        if head.Val >= x {
+            ge.Next = head
+            ge = ge.Next
+        }
+        head = head.Next
+    }
+    ge.Next = nil
+    lt.Next = geNode.Next
+    return ltNode.Next
+}

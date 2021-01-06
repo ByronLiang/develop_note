@@ -78,3 +78,21 @@ func ValidMountainArray(A []int) bool {
     }
     return i > 0 && j < length -1 && i == j
 }
+
+/**
+https://leetcode-cn.com/problems/sorted-merge-lcci/
+ */
+func MergeArray(A []int, m int, B []int, n int) {
+    i, j, end := m - 1, n - 1, m + n - 1
+    for j >= 0 {
+        if i < 0 || B[j] >= A[i] {
+            A[end] = B[j]
+            j--
+            end--
+        } else {
+            A[end] = A[i]
+            i--
+            end--
+        }
+    }
+}
