@@ -28,3 +28,16 @@ func revers(l, r int, bytes []byte)  {
         r--
     }
 }
+
+/**
+https://leetcode-cn.com/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/submissions/
+ */
+func ReverseLeftWords(s string, n int) string {
+    bytes := []byte(s)
+    length := len(bytes)
+    newBytes := make([]byte, 0, length)
+    for i := n; i < length + n; i ++ {
+        newBytes = append(newBytes, bytes[i%length])
+    }
+    return string(newBytes)
+}

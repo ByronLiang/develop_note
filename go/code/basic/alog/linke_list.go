@@ -10,10 +10,7 @@ type ListNode struct {
 }
 
 func InitListNode(init []int) *ListNode {
-    head := &ListNode{
-        Val: 1,
-        Next: nil,
-    }
+    head := &ListNode{}
     temp := head
     for _, val := range init {
         temp.Next = &ListNode{
@@ -22,7 +19,7 @@ func InitListNode(init []int) *ListNode {
         }
         temp = temp.Next
     }
-    return head
+    return head.Next
 }
 
 func ShowListNode(head *ListNode)  {
@@ -144,4 +141,57 @@ func Partition(head *ListNode, x int) *ListNode {
     ge.Next = nil
     lt.Next = geNode.Next
     return ltNode.Next
+}
+
+/**
+https://leetcode-cn.com/problems/add-two-numbers/
+ */
+func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+    plus := 0
+    newListNode := &ListNode{}
+    current := newListNode
+    for l1 != nil && l2 != nil  {
+        res := l1.Val + l2.Val + plus
+        // 是否超出10 (是否需要进位)
+        plus = res / 10
+        // 取余数
+        val := res % 10
+        fmt.Printf("l1: %v; l2: %v; val: %v \n", l1.Val, l2.Val, val)
+        current.Next = &ListNode{Val:val}
+        current = current.Next
+        l1 = l1.Next
+        l2 = l2.Next
+    }
+
+    for l1 != nil {
+        res := l1.Val + plus
+        // 是否超出10
+        plus = res / 10
+        // 取余数
+        val := res % 10
+        current.Next = &ListNode{Val:val}
+        current = current.Next
+        l1 = l1.Next
+    }
+
+    for l2 != nil {
+        res := l2.Val + plus
+        // 是否超出10
+        plus = res / 10
+        // 取余数
+        val := res % 10
+        current.Next = &ListNode{Val:val}
+        current = current.Next
+        l2 = l2.Next
+    }
+
+    // 检测是否仍有剩余位是否大于0, 大于0仍需进行进位处理
+    if plus > 0 {
+        current.Next = &ListNode{
+            Val: plus,
+        }
+        current = current.Next
+    }
+
+    return newListNode.Next
 }

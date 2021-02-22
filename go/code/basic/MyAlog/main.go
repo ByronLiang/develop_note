@@ -11,7 +11,6 @@ func main()  {
     //search()
     //isUnique()
     //backspace()
-    //linkList()
     //numbersThanCurrent()
     uniqueOccurrences()
     //sumNumbers()
@@ -51,15 +50,6 @@ func backspace() {
     } else {
         fmt.Println("failed")
     }
-}
-
-func linkList()  {
-    //node := alog.InitListNode([]int{2,2,1})
-    node := alog.InitListNode([]int{2,3,4})
-    alog.ShowListNode(node)
-    //alog.IsPalindrome(node)
-    newNode := alog.SwapPairs(node)
-    alog.ShowListNode(newNode)
 }
 
 // 计数排序算法: 得出当前排名数值
