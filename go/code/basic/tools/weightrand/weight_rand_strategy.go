@@ -36,3 +36,23 @@ func (sw *SubWeightRand) PickMember(seed int64) interface{} {
 	}
 	return nil
 }
+
+type BinaryWeightRand struct {
+	Wr *WeightRand
+}
+
+/**
+二分法查询
+*/
+func (bw *BinaryWeightRand) PickMember(seed int64) interface{} {
+	i, j := 0, len(bw.Wr.total)-1
+	for i < j {
+		mid := (i + (j - i)) >> 1
+		if seed >= bw.Wr.total[mid] {
+			i = mid + 1
+		} else {
+			j = mid
+		}
+	}
+	return bw.Wr.members[i].Item
+}

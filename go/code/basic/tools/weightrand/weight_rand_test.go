@@ -1,6 +1,8 @@
 package weightrand
 
-import "testing"
+import (
+	"testing"
+)
 
 type RoomItem struct {
 	Weight int64
@@ -44,6 +46,19 @@ func TestWeightRand_MulPick(t *testing.T) {
 		NewWeightRandItem(2, 2),
 		NewWeightRandItem(1, 3)).CalMax()
 	obj.InitStrategy(&SubWeightRand{Wr: obj})
+	res, err := obj.MulPick(5)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("res: %v", res)
+}
+
+func TestWeightRand_BinaryPick(t *testing.T) {
+	obj := NewWeightRand(
+		NewWeightRandItem(1, 1),
+		NewWeightRandItem(2, 2),
+		NewWeightRandItem(1, 3)).InitTotal().CalMax()
+	obj.InitStrategy(&BinaryWeightRand{Wr: obj})
 	res, err := obj.MulPick(5)
 	if err != nil {
 		t.Fatal(err)
