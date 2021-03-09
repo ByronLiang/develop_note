@@ -6,12 +6,11 @@ import (
     "strings"
 )
 
-var (
-    index int
-    word string
-)
-
 func StringFunc()  {
+    var (
+        index int
+        word string
+    )
     paper := []string{"today","morning"}
     //查询字符[字节查询]
     index, word = GetByte(paper[0], 166)
@@ -60,3 +59,5 @@ func DiffEncodeByte() {
     cnTxt := cn[0:11]
     fmt.Println(string(enTxt), string(cnTxt))
 }
+
+
