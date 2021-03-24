@@ -33,6 +33,8 @@ func CsvWorker(fileName string) {
 	consumeHandle(res)
 }
 
+
+
 func initProducerHandle(reader *csv.Reader, producer chan []string)  {
 	for {
 		content, err := reader.Read()
@@ -46,6 +48,8 @@ func initProducerHandle(reader *csv.Reader, producer chan []string)  {
 	}
 	close(producer)
 }
+
+
 
 func initWorkerHandle(product chan []string, res chan interface{}, ctx context.Context) *sync.WaitGroup {
 	wg := new(sync.WaitGroup)

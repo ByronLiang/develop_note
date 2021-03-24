@@ -1,10 +1,12 @@
 package consumer
 
 import (
+	"context"
 	"encoding/csv"
 	"fmt"
 	"io"
 	"os"
+	"sync"
 	"testing"
 )
 
@@ -14,6 +16,26 @@ func TestCondConsumer(t *testing.T) {
 
 func TestCsvWorker(t *testing.T) {
 	CsvWorker("test.csv")
+}
+
+func TestCsvExporter(t *testing.T) {
+	CsvExporter("test.csv", ExporterWorkerHandle)
+}
+
+func ExporterWorkerHandle(product chan []string, ctx context.Context, wg *sync.WaitGroup)  {
+	defer wg.Done()
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case data, ok := <-product:
+			if !ok {
+				fmt.Println("end")
+				return
+			}
+			fmt.Println("consumer: ", data)
+		}
+	}
 }
 
 func TestReadCsv(t *testing.T) {
