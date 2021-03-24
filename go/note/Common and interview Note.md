@@ -159,7 +159,26 @@ defer func() {
 
 ```
 
-defer是后进先出顺序下；defer里发生panic, 优先将正常defer方法执行完, 最后再处理发生panic的defer方法
+```go
+// main协程执行函数
+fun defer_call() {
+    defer func() {
+        // do A 
+    }()
+    defer func() {
+        // do B
+    }()
+    defer func() {
+        // do C 
+    }()
+    panic("B")
+}
+// 执行顺序: do C -> do B - do A - panic
+```
+
+1. defer是后进先出顺序下；defer里发生panic, 优先将正常defer方法执行完, 最后再处理发生panic的defer方法
+
+2. 协程遇到panic时，遍历本协程的`defer链表`，并执行defer。在执行defer过程中，遇到recover则停止panic，返回recover处继续往下执行。如果没有遇到recover，遍历完本协程的defer链表后，向stderr抛出panic信息
 
 ### 切片扩容
 
