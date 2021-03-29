@@ -69,3 +69,25 @@ func dfsTxt(temp []string, start int, res *[][]string, s string) {
 		//}
 	}
 }
+
+func trackingAll(i int, target []int, tmp []int, res *[][]int) {
+	container := make([]int, len(tmp))
+	copy(container, tmp)
+	*res = append(*res, container)
+	fmt.Println("before", tmp, i)
+	for j := i; j < len(target); j++ {
+		tmp = append(tmp, target[j])
+		trackingAll(j+1, target, tmp, res)
+		fmt.Println("end", tmp, j)
+		tmp = tmp[:len(tmp)-1]
+	}
+}
+
+/**
+子集合
+*/
+func SubSort(t []int) [][]int {
+	var res [][]int
+	trackingAll(0, t, []int{}, &res)
+	return res
+}
