@@ -22,6 +22,7 @@ func Permute(nums []int) [][]int {
 */
 func backtracking(nums []int, res *[][]int, tmp []int, visited []bool) {
 	// 成功找到一组
+	// 确定结束条件
 	if len(tmp) == len(nums) {
 		var c = make([]int, len(tmp))
 		copy(c, tmp)
@@ -76,6 +77,11 @@ func trackingAll(i int, target []int, tmp []int, res *[][]int) {
 	*res = append(*res, container)
 	fmt.Println("before", tmp, i)
 	for j := i; j < len(target); j++ {
+		// 处理重复子集合
+		if j > i && target[j] == target[j-1] {
+			fmt.Println("check", j)
+			continue
+		}
 		tmp = append(tmp, target[j])
 		trackingAll(j+1, target, tmp, res)
 		fmt.Println("end", tmp, j)
