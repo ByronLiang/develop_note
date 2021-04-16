@@ -183,18 +183,21 @@ func TimeTicker()  {
     // 时间类型的输出管道
     //times := kk.C
     ticker := time.Tick(2 * time.Second)
-    //一次性计时器
-    time.After(5e9)
+    overTimer := time.NewTimer(5 * time.Second)
+    defer overTimer.Stop()
+    // 一次性计时器
+    // time.After(5 * time.Second)
     //监听定时器通道 异步
     for {
        select {
        case <-ticker:
            counter ++
            fmt.Println("time reach", counter)
-           if counter == 3 {
-               fmt.Println("reached count")
-               return
-           }
+       case <-overTimer.C:
+           fmt.Println("time over")
+           return
+       //case <-time.After(5 * time.Second): // 禁止: 每次select时，都会重新初始化一个全新的计时器, 无法被回收 引发内存泄露
+       //    return
        }
     }
 }

@@ -13,5 +13,6 @@ func main() {
     //worker.ThreadExchange()
     //worker.CheckChanFullDemo()
     //worker.CloseSign()
-    worker.VerifyChanClose()
+    //worker.VerifyChanClose()
+    worker.TimeTicker()
 }
