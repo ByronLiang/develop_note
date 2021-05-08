@@ -243,3 +243,9 @@ test := &Test{Name: "test"}
 fmt.Printf("common-format=%v, basical-format=%v+, detail-format=%#v", test, test, test)
 ```
 
+### Range注意点
+
+- `for i, v := range a`里面的就是 a 的副本; `for i := range a` and `for i, v := range &a` ，都不是 a 的副本
+
+- 若副本里的数据都是struct指针，对副本的成员进行数据操作，会对副本数据产生影响；副本数据为非对象指针, 对副本成员进行数据操作, 不影响副本数据
+
