@@ -37,3 +37,7 @@ func Test_RoutineFinalizer(t *testing.T) {
 	// 变量对象仍有使用，不对变量进行垃圾回收
 	//wrapper.finalizeObj.rec <- "aa"
 }
+
+func TestFileRead(t *testing.T) {
+	FileRead()
+}
