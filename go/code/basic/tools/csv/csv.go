@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"fmt"
+	"io"
 	"reflect"
 )
 
@@ -56,4 +57,9 @@ func WriterCSV(header []string, data interface{}) []byte {
 
 	w.Flush()
 	return buf.Bytes()
+}
+
+func ContentExport(write io.Writer, content []byte) error {
+	_, err := write.Write(content)
+	return err
 }

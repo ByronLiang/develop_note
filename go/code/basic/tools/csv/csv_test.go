@@ -45,6 +45,12 @@ func TestWriterMapCsv(t *testing.T) {
 	//	return
 	//}
 	//defer file.Close()
-	//_, _ = file.Write(buf)
-	fmt.Println(string(buf))
+	//// 导出文件
+	//if err := ContentExport(file, buf); err != nil {
+	//	fmt.Println(err.Error())
+	//}
+	// 命令行输出
+	if err := ContentExport(os.Stdout, buf); err != nil {
+		fmt.Println(err.Error())
+	}
 }
