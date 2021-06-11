@@ -1,6 +1,8 @@
 package alog
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func Permute(nums []int) [][]int {
 	var res [][]int
@@ -96,4 +98,45 @@ func SubSort(t []int) [][]int {
 	var res [][]int
 	trackingAll(0, t, []int{}, &res)
 	return res
+}
+
+var (
+	letterMap = []string{
+		" ",    //0
+		"",     //1
+		"abc",  //2
+		"def",  //3
+		"ghi",  //4
+		"jkl",  //5
+		"mno",  //6
+		"pqrs", //7
+		"tuv",  //8
+		"wxyz", //9
+	}
+	res   = make([]string, 0)
+	final = 0
+)
+
+// DFS
+func LetterCombinations(digits string) []string {
+	if digits == "" {
+		return res
+	}
+	findCombination(&digits, 0, "")
+	return res
+}
+
+func findCombination(digits *string, index int, s string) {
+	if index == len(*digits) {
+		res = append(res, s)
+		return
+	}
+	num := (*digits)[index]
+	letter := letterMap[num-'0']
+	for i := 0; i < len(letter); i++ {
+		findCombination(digits, index+1, s + string(letter[i]))
+		// 由于只传形参, 无需对s进行剪枝处理
+		fmt.Println(letter[i], s)
+	}
+	return
 }

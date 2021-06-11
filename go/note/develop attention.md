@@ -101,3 +101,42 @@ sort.Sort(SortByPinyin(user))
 
 - 针对切片类型的数据作为函数的形参传递，需要以指针类型进行传值；`TempFun(n *[]int)` 函数内即便发生扩容, 切片数据仍保持有效
 
+## nil值理解
+
+- nil是一种变量；适用于指针，函数，interface，map，slice，channel这6种类型
+
+- 针对变量定义 `var set map[int]string` 分配变量指定大小的内存，且都为置0分配, 并且确定一个变量名称
+
+- 凡是变量定义, 它与nil进行值判断都是为true; nil值判断, 主要判断当前变量里的内存是否为0分配
+
+- 针对切片slice, 变量定义与`make([]string, 0)`具有相同效果[定义`struct slice` 核心结构已分配内存]；而其余类型而是有差异的
+
+## defer值返回
+
+
+```go
+// 非命名值返回
+func deferHandle(i *int) int {
+	defer func() {
+		*i++
+	}()
+	return *i
+}
+
+// 命名值返回
+func deferHandleWithName(i *int) (m int) {
+    m = *i
+    defer func() {
+    	// 影响最终返回的m值
+        m++
+    }()
+    return m + 10
+}
+```
+
+- `defer语句`在`return语句`之后执行
+
+- 非命名返回值：取决于return时候的值
+
+- 命名返回：如同函数内的全局变量, 先执行完return的值逻辑，再执行defer对值逻辑; 执行函数体内对命名返回值的任何修改
+

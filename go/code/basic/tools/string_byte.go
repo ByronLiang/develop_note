@@ -1,7 +1,10 @@
 package tools
 
 import (
+	"fmt"
 	"reflect"
+	"strconv"
+	"strings"
 	"unsafe"
 )
 
@@ -25,4 +28,15 @@ func BytesToString(b []byte) string {
 		Len:  sliceHeader.Len,
 	}
 	return *(*string)(unsafe.Pointer(&stringHeader))
+}
+
+// 移除精度以外为0的数值
+func FormatFloatWithPre(num float64, pre int) string {
+	const (
+		zero = "0"
+		dot  = "."
+	)
+	str := fmt.Sprintf("%." + strconv.Itoa(pre) +"f", num)
+	return strings.TrimRight(str, zero)
+	//return strings.TrimRight(strings.TrimRight(str, zero), dot)
 }

@@ -1,6 +1,8 @@
 package tools
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestNewRingBuffer(t *testing.T) {
 	ringBuf, err := NewRingBuffer(5)
