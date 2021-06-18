@@ -55,3 +55,31 @@ Redis服务器采用TCP协议; 可将请求数据批量发送到服务器，再�
 在集群模式中，发布者发布消息后的返回值取决于订阅者与发布者在不在同一个节点上：
 
 发布者发布消息后返回值为与发布者相同节点当前订阅了该频道的客户端数量。
+
+### expire过期设置
+
+- 对key设置疏散且随机的过期时间；避免发送缓存雪崩，集中大量的key过期
+
+### 大key的DEL操作
+
+因redis是使用单线程，下述行为会发生较长时间的阻塞情况; 导致其他请求访问缓慢
+
+- DEL命令删除体积较大的键， 又或者在使用 FLUSHDB 和 FLUSHALL 删除包含大量键的数据库
+
+- 清理过期数据和淘汰内存超限的大体积数据
+
+#### 解决
+
+lazyfree机制: 删除键或数据库的操作放在后台线程`(lazyfree线程)`里执行, 达到异步删除效果，尽可能地避免服务器阻塞
+
+redis.conf文件配置如下: 默认是使用同步删除，若配置为`yes` 则进行异步删除
+```shell
+# 内存满下的LRU策略：驱逐key
+lazyfree-lazy-eviction no
+# key过期
+lazyfree-lazy-expire no
+# del删除命令
+lazyfree-lazy-server-del no
+# flush db 操作
+replica-lazy-flush no
+```
