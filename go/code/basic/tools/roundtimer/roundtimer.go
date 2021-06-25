@@ -6,13 +6,15 @@ import (
 	"time"
 )
 
+type Handle func(rt *RoundTimer)
+
 type RoundTimer struct {
 	id int64
 	parameters interface{}
 	interval time.Duration
 	running  bool
-	timerHandle func(rt *RoundTimer)
-	timerAfterHandle func(rt *RoundTimer)
+	timerHandle Handle
+	timerAfterHandle Handle
 	timer    *time.Timer
 
 	sync.Mutex
@@ -29,10 +31,9 @@ func NewRoundTimer() *RoundTimer {
 }
 
 // 初次重置计时器回调
-func (rt *RoundTimer) initTimer(afterInitHandle func()) {
+func (rt *RoundTimer) initTimer() {
 	rt.timer = time.AfterFunc(rt.interval, rt.resetHandle)
-	// 初次配置计时器的回调设置
-	afterInitHandle()
+	rt.running = true
 }
 
 // 重置回调与续期计时器
@@ -48,18 +49,33 @@ func (rt *RoundTimer) resetHandle() {
 	}
 	// 进行续期
 	rt.timer = time.AfterFunc(rt.interval, rt.resetHandle)
-	// 完成续期的操作
-	rt.timerAfterHandle(rt)
+	if rt.timerAfterHandle != nil {
+		// 完成续期的操作
+		rt.timerAfterHandle(rt)
+	}
 }
 
 // 首次启动定时器
-func (rt *RoundTimer) Start(startHandle func()) error {
+func (rt *RoundTimer) Start() error {
 	rt.Lock()
 	defer rt.Unlock()
 	if rt.running {
 		return fmt.Errorf("id: %d timer already running", rt.id)
 	}
-	rt.initTimer(startHandle)
+	rt.initTimer()
+	return nil
+}
+
+func (rt *RoundTimer) StartWithHandle(startHandle Handle) error {
+	rt.Lock()
+	if rt.running {
+		return fmt.Errorf("id: %d timer already running", rt.id)
+	}
+	rt.initTimer()
+	rt.Unlock()
+	if startHandle != nil {
+		startHandle(rt)
+	}
 	return nil
 }
 
@@ -85,14 +101,54 @@ func (rt *RoundTimer) Stop() {
 	rt.timer.Stop()
 }
 
+func (rt *RoundTimer) StopWithHandle(handle Handle) {
+	rt.Mutex.Lock()
+	rt.running = false
+	rt.timer.Stop()
+	rt.Mutex.Unlock()
+	if handle != nil {
+		handle(rt)
+	}
+}
+
 // 重置对象参数
 func (rt *RoundTimer) Reset() {
 	rt.Mutex.Lock()
 	defer rt.Mutex.Unlock()
+	rt.timer.Stop()
 	rt.id = 0
 	rt.running = false
 	rt.interval = 0 * time.Second
 	rt.timerHandle = nil
 	rt.timerAfterHandle = nil
 	rt.parameters = nil
+}
+
+func (rt *RoundTimer) SetInterval(interval time.Duration) *RoundTimer {
+	if interval < 0 {
+		rt.interval = 1 * time.Second
+	} else {
+		rt.interval = interval
+	}
+	return rt
+}
+
+func (rt *RoundTimer) SetId(id int64) *RoundTimer {
+	rt.id = id
+	return rt
+}
+
+func (rt *RoundTimer) SetHandle(callback, resetCallback func(rt *RoundTimer)) *RoundTimer {
+	rt.timerHandle = callback
+	rt.timerAfterHandle = resetCallback
+	return rt
+}
+
+func (rt *RoundTimer) SetParameters(para interface{}) *RoundTimer {
+	rt.parameters = para
+	return rt
+}
+
+func (rt *RoundTimer) GetPara() interface{} {
+	return rt.parameters
 }

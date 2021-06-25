@@ -2,6 +2,11 @@ package roundtimer
 
 import "sync"
 
+// 池化技术: 池化频繁创建的对象
+// 复用原有对象, 减少创建和销毁的动作
+
+var DefaultRoundTimerPool = NewRoundTimerPool()
+
 type roundTimerPool struct {
 	pool *sync.Pool
 }
@@ -22,7 +27,7 @@ func (r *roundTimerPool) Get() *RoundTimer {
 	return r.pool.Get().(*RoundTimer)
 }
 
-func (r *roundTimerPool) Put(rt *RoundTimer)  {
+func (r *roundTimerPool) Put(rt *RoundTimer) {
 	rt.Reset()
 	r.pool.Put(rt)
 }
