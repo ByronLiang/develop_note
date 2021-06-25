@@ -14,8 +14,13 @@
 
 2. 具体解析可参考: `net.LookupHost`对域名进行解析方法； `net\lookup.go`里的`lookupIPAddr`
 
-3. `lookupIPAddr`流程: 读取本地`/etc/hosts`文件;
-   `goLookupIPCNAMEOrder`解析是否对应域名的IP地址; 然后再到读取`/etc/resolv.conf`, 通过访问DNS服务器进行域名解析
+#### lookupIPAddr函数流程:
+
+1. 读取本地`/etc/hosts`文件;
+
+2. `goLookupIPCNAMEOrder`解析是否对应域名的IP地址; 然后再到读取`/etc/resolv.conf`, 解析获取设置的DNS服务器地址, DNS地址默认端口为53
+   
+3. 默认优先使用UDP传输协议，设置重试次数，请求DNS服务器进行域名解析; 若请求失败，再使用TCP协议请求DNS服务地址
 
 ### 优化域名解析
 

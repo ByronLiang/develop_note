@@ -12,6 +12,7 @@ func (sh SortHelper) MergeVSort(data []int) []int {
     }
     mid := len(data) >> 1
     left := sh.MergeVSort(data[0:mid])
+    fmt.Println("mid", mid, left, data)
     right := sh.MergeVSort(data[mid:])
     fmt.Println(left, right)
     return bing(left, right)
