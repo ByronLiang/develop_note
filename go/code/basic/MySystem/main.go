@@ -2,10 +2,13 @@ package main
 
 import (
     "fmt"
+    "runtime/pprof"
     "test/worker"
+    _ "runtime/pprof"
 )
 
 func main()  {
+    pprof.StartCPUProfile()
     items := map[string]string{
         "banana": "3",
         "apple": "2",
