@@ -140,3 +140,51 @@ func deferHandleWithName(i *int) (m int) {
 
 - 命名返回：如同函数内的全局变量, 先执行完return的值逻辑，再执行defer对值逻辑; 执行函数体内对命名返回值的任何修改
 
+## 针对Post请求体涉及数组解析 字段异构解析
+
+msgBody的数组里两个元素组成；包含text与location 两个文本与坐标的异构体
+
+```json
+{
+  "msgBody": [
+    {
+      "type": "text",
+      "content": {
+        "text": "something"
+      }
+    }, {
+      "type": "location",
+      "content": {
+        "desc": "someone",
+        "latitude": 129.340656774469956,
+        "longitude": 116.77497920478824
+      }
+    }
+  ]
+}
+```
+
+针对http里的`req *http.Request` 对请求体`req.Body`转换成struct: 对于字段是数组类型，或者异构体，解析的成员类型需要是`interface{}`，否则会解析为空
+
+异构体：当type字段是不同值时，content字段呈不同数据结构; 
+
+```go
+package main
+
+// 针对整个数组数据进行解析
+type Body struct {
+	MsgBody interface{} `json:"msgBody"`
+}
+
+// []MsgBodyEle 切片类型
+type MsgBody struct {
+	Content []*MsgBodyEle `json:"msgBody"`
+}
+
+// 针对数组里每个元素的异构体进行解析
+type MsgBodyEle struct {
+	Type string `json:"type"`
+	Content interface{} `json:"content"`
+}
+```
+

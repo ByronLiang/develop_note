@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
+	"errors"
 	"os"
 )
 
@@ -98,5 +99,20 @@ func (r *rsaEncrypt) decrypt(cryptContent string) (string, error) {
 		return "", err
 	}
 	return string(plainText), nil
+}
+
+// 获取可加密明文的最大长度
+func (r *rsaEncrypt)GetLimitMsgSize() (int, error) {
+	block, _ := pem.Decode(r.publicKey)
+	if block == nil {
+		return 0, errors.New("public key decode fail")
+	}
+	publicKeyInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return 0, err
+	}
+	publicKey := publicKeyInterface.(*rsa.PublicKey)
+	size := publicKey.Size()
+	return size, nil
 }
 
