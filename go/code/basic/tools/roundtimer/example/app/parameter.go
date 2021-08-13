@@ -14,8 +14,8 @@ type CountPara struct {
 }
 
 func RoundTimerParaPoolSrv() {
-	pool := roundtimer.DefaultRoundTimerPool
-	rt := pool.Get()
+	roundtimer.NewRoundTimerPool()
+	rt := roundtimer.Pool.Get()
 	rt.SetInterval(1 * time.Second).
 		SetId(1).
 		SetParameters(&CountPara{
@@ -29,7 +29,7 @@ func RoundTimerParaPoolSrv() {
 		return
 	}
 	tools.SignCatch(nil, func() {
-		pool.Put(rt)
+		roundtimer.Pool.Put(rt)
 	})
 }
 

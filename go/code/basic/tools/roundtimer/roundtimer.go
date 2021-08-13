@@ -12,6 +12,7 @@ type RoundTimer struct {
 	id int64
 	parameters interface{}
 	interval time.Duration
+	isRound bool
 	running  bool
 	timerHandle Handle
 	timerAfterHandle Handle
@@ -42,7 +43,6 @@ func (rt *RoundTimer) resetHandle() {
 		return
 	}
 	// 执行定时操作
-	// TODO: 新增参数进行配置同步/异步执行
 	rt.timerHandle(rt)
 	if !rt.running {
 		return
@@ -115,7 +115,9 @@ func (rt *RoundTimer) StopWithHandle(handle Handle) {
 func (rt *RoundTimer) Reset() {
 	rt.Mutex.Lock()
 	defer rt.Mutex.Unlock()
-	rt.timer.Stop()
+	if rt.timer != nil {
+		rt.timer.Stop()
+	}
 	rt.id = 0
 	rt.running = false
 	rt.interval = 0 * time.Second

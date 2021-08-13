@@ -8,8 +8,8 @@ import (
 )
 
 func RoundTimerPoolSrv() {
-	pool := roundtimer.DefaultRoundTimerPool
-	rt := pool.Get()
+	roundtimer.NewRoundTimerPool()
+	rt := roundtimer.Pool.Get()
 	rt.SetInterval(2 * time.Second).
 		SetId(1).
 		SetHandle(roundTimerCallback, roundTimerResetAfter)
@@ -19,7 +19,7 @@ func RoundTimerPoolSrv() {
 		return
 	}
 	tools.SignCatch(nil, func() {
-		pool.Put(rt)
+		roundtimer.Pool.Put(rt)
 	})
 }
 
