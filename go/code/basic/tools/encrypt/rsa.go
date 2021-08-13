@@ -8,6 +8,8 @@ import (
 	"encoding/pem"
 	"errors"
 	"os"
+	"strings"
+	"syscall"
 )
 
 const (
@@ -17,11 +19,14 @@ const (
 	publicKeyPrefix  = "RSA PUBLIC KEY "
 )
 
+const DefaultKeySize = 2048
+
 var RsaEncrypt *rsaEncrypt
 
 type rsaEncrypt struct {
 	publicKey  []byte
 	privateKey []byte
+	limitSize int
 }
 
 // 读取public.pem, private.pem密匙文件
@@ -32,8 +37,12 @@ func NewRsaEncrypt(publicKey, privateKey string) {
 	}
 }
 
-func GetRsaKey() error {
-	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
+func InitRsaEncrypt() {
+	RsaEncrypt = &rsaEncrypt{}
+}
+
+func GetRsaKey(keySize int) error {
+	privateKey, err := rsa.GenerateKey(rand.Reader, keySize)
 	if err != nil {
 		return err
 	}
@@ -112,7 +121,105 @@ func (r *rsaEncrypt)GetLimitMsgSize() (int, error) {
 		return 0, err
 	}
 	publicKey := publicKeyInterface.(*rsa.PublicKey)
-	size := publicKey.Size()
+	size := publicKey.Size() - 12
 	return size, nil
 }
+
+func (r *rsaEncrypt) SetLimitMsgSize() error {
+	size, err := r.GetLimitMsgSize()
+	if err != nil {
+		return err
+	}
+	r.limitSize = size
+	return nil
+}
+
+// 识别长文本并分组加密
+func (r *rsaEncrypt) encryptLongText(content string) ([]string, error) {
+	if r.limitSize == 0 {
+		// 加密长度限制异常
+		return nil, errors.New("limitSize error")
+	}
+	// 检测是否超出可加密字符长度
+	if len(content) > r.limitSize {
+		i := 1
+		offset := len(content) / r.limitSize
+		restSize := len(content) % r.limitSize
+		encryptListSize := offset
+		if restSize > 0 {
+			// 预留一位存放剩余加密内容
+			encryptListSize ++
+		}
+		contentEncryptList := make([]string, encryptListSize)
+		for i = 1; i <= offset; i++ {
+			start := (i-1) * r.limitSize
+			end := i * r.limitSize
+			c := make([]byte, r.limitSize)
+			copy(c, content[start:end])
+			dataE, err := r.encrypt(string(c))
+			if err != nil {
+				contentEncryptList[i-1] = ""
+				continue
+			}
+			contentEncryptList[i-1] = dataE
+		}
+		// 对剩余内容进行加密
+		if restSize > 0 {
+			c := make([]byte, restSize)
+			copy(c, content[(i - 1) * r.limitSize:])
+			dataE, err := r.encrypt(string(c))
+			if err != nil {
+				contentEncryptList[i - 1] = ""
+			} else {
+				contentEncryptList[i - 1] = dataE
+			}
+		}
+		return contentEncryptList, nil
+	}
+	// 无需分组加密
+	dataE, err := RsaEncrypt.encrypt(content)
+	if err != nil {
+		return nil, err
+	}
+	return []string{dataE}, nil
+}
+
+func (r *rsaEncrypt) decryptLongText(cryptContentList []string) string {
+	contentDecryptList := make([]string, len(cryptContentList))
+	for j := 0; j < len(cryptContentList); j++ {
+		if cryptContentList[j] != "" {
+			c, err := r.decrypt(cryptContentList[j])
+			if err == nil {
+				contentDecryptList[j] = c
+			}
+		}
+	}
+	return strings.Join(contentDecryptList, "")
+}
+
+// 不建议生产环境使用，适用测试环境
+func (r *rsaEncrypt) GetKeyFromFile(path, filename string) error {
+	file := path + filename
+	d, err := syscall.Open(file, syscall.O_RDONLY, 0)
+	if err != nil {
+		return err
+	}
+	defer syscall.Close(d)
+	var buf [2048]byte
+	n, err := syscall.Read(d, buf[:])
+	if err != nil {
+		return err
+	}
+	keyBuf := make([]byte, n)
+	if filename == privateFileName {
+		copy(keyBuf, buf[:n])
+		r.privateKey = keyBuf
+	}
+	if filename == publicFileName {
+		copy(keyBuf, buf[:n])
+		r.publicKey = keyBuf
+	}
+	return nil
+}
+
 
