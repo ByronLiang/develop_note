@@ -45,3 +45,26 @@
 当然也可能出现 GC 来不及回收，因此出现 inuse_space 也变高的情况 内存泄漏，通常 alloc_space 较高，且 inuse_space 也较高
 
 `go tool pprof -alloc_space mem.pprof` 指定一个指标查看; 默认是查看`inuse_space` 已分配但未释放的内存指标
+
+### GC检测
+
+#### 采集与查看方式
+
+1. 执行采集: `GODEBUG=gctrace=1 ./编译文件`; 直接在命令窗口查看输出的采集结果
+
+2. 代码层trace: 生成`trace.out`文件
+
+```go
+f, _ := os.Create("trace.out")
+defer f.Close()
+trace.Start(f)
+defer trace.Stop()
+```
+
+3. pprof工具采集并下载trace文件
+
+使用trace可以通过访问`/debug/pprof/trace`路由来进行，seconds参数为采集时长；并将trace的结果保存为`trace.out`
+
+`wget http://127.0.0.1:6060/debug/pprof/trace?seconds=10 -O trace.out`
+
+4. 查看工具`go tool trace xxx.out`
