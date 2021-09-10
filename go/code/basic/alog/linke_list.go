@@ -238,3 +238,30 @@ func MergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return newListNode.Next
 }
+
+// 删除链表的倒数第 N 个结点
+// https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/
+func RemoveNthFromEnd(head *ListNode, n int) *ListNode {
+	// 快指针
+	frontNode := &ListNode{}
+	frontNode.Next = head
+	front := frontNode
+	// 慢指针
+	currentNode := &ListNode{}
+	currentNode.Next = head
+	current := currentNode
+	i := 0
+	for i < n && front != nil {
+		front = front.Next
+		i++
+	}
+	if front == nil {
+		return head.Next
+	}
+	for front.Next != nil {
+		current = current.Next
+		front = front.Next
+	}
+	current.Next = current.Next.Next
+	return currentNode.Next
+}
