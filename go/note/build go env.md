@@ -22,6 +22,8 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 3. `go env -w GOPROXY=https://goproxy.io,direct` 设置下载包的代理镜像; `https://mirrors.aliyun.com/goproxy/` 阿里云镜像地址
 
+4. 设置私有仓库镜像: `go env -w GOPRIVATE="git.xxx.xx/*"`
+
 ### 模块项目初始化
 
 1. `go mod init xxx` 对xxx模块初始化, 生成`go.mod` 包管理相关信息
