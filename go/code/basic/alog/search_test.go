@@ -15,3 +15,11 @@ func TestBitSearch(t *testing.T) {
 	res := BitSearch(-10, 3)
 	t.Log(res)
 }
+
+func TestMergeIntervals(t *testing.T) {
+	intervals := make([][]int, 0)
+	intervals = [][]int{{1, 4}, {1, 4}}
+	//intervals = [][]int{{1, 4}, {8, 10}, {2, 6}}
+	res := MergeIntervals(intervals)
+	t.Log(res)
+}
