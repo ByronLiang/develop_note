@@ -3,6 +3,7 @@ package alog
 import (
 	"fmt"
 	"math"
+	"sort"
 )
 
 func SearchInsert(data []int, target int) int {
@@ -179,4 +180,28 @@ func backTrackBit(a, b int32, res int) int {
 	res += bit
 	res = backTrackBit(a, b, res)
 	return res
+}
+
+/**
+https://leetcode-cn.com/problems/merge-intervals/
+*/
+func MergeIntervals(intervals [][]int) [][]int {
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i][0] < intervals[j][0]
+	})
+	newIntervals := make([][]int, 0)
+	newIntervals = append(newIntervals, intervals[0])
+	for i := 1; i < len(intervals); i++ {
+		lastInterval := newIntervals[len(newIntervals)-1]
+		// 最大值无法达到当前区间的最小值
+		if lastInterval[1] < intervals[i][0] {
+			newIntervals = append(newIntervals, intervals[i])
+			continue
+		}
+		// 最大值到达当前区间值, 进行区间合并
+		if lastInterval[1] < intervals[i][1] {
+			newIntervals[len(newIntervals)-1][1] = intervals[i][1]
+		}
+	}
+	return newIntervals
 }
