@@ -295,3 +295,38 @@ func verifyChan(c chan struct{}) (isClose bool) {
 	}
 	return
 }
+
+func MultiConsumerHandle() {
+	wg := sync.WaitGroup{}
+	queue := make(chan int, 5)
+	// consumer
+	for i := 2; i > 0; i-- {
+		go func(j int) {
+			wg.Add(1)
+			defer wg.Done()
+			for {
+				select {
+				case num, ok := <-queue:
+					if !ok {
+						fmt.Println("end go", j, <-queue)
+						return
+					}
+					fmt.Println(num, j)
+					time.Sleep(400 * time.Millisecond)
+				default:
+					time.Sleep(200 * time.Millisecond)
+					fmt.Println("sleep", j)
+				}
+			}
+		}(i)
+	}
+	// producer
+	for x := 20; x > 0; x-- {
+		queue <- x
+		time.Sleep(500 * time.Millisecond)
+	}
+	close(queue)
+	fmt.Println("wait")
+	wg.Wait()
+	time.Sleep(500 * time.Millisecond)
+}
