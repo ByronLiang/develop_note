@@ -25,3 +25,23 @@
 1. protoc-gen-gogofaster: [gogo/protobuf](https://github.com/gogo/protobuf) 基于protoc-gen-go 做出相关优化
 
 2. protoc-go-inject-tag: 对生成的Message成员进行自定义注入
+
+#### 查看Http2 数据帧传递
+
+`GODEBUG=http2debug=2 go run main.go` 监控gRPC 应用层数据帧传递日志, 但无法查看传输层TCP，IP、端口等行为
+
+## 开发细节
+
+### gRPC 超时处理流程
+
+超时时长的设置是由Client进行配置, 调用时传入了带 timeout 的 ctx: `context.WithTimeout`
+
+1. gRPC的超时计算是可以跨进程累计, 超时传递；若请求链路如: `SrvA -> SrvB -> SrvC` 配置的超时时长，需要考虑每个请求的耗时时长，从而，设置合理的总超时时长；timeout = 5s => srvA(3s)->srvb(2s)->srvc(报超时异常)
+
+2. 超时时长剩余时长都存储在 Http2 的metadata 里 (Headers 帧)；key 为 `grpc-timeout`; 当请求进入服务里，会解析剩余超时时长, 若已超出时长, 则不再完成剩余的请求, 响应超时的异常码
+
+### gRPC 优雅关闭连接
+
+利用Http2 GoAway 帧信号关闭连接 服务端对每一个连接都发送关闭连接信号；客户端会从发送流里识别 GoAway 帧信号，从而客户端关闭活动的stream
+
+
