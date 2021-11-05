@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -329,4 +330,45 @@ func MultiConsumerHandle() {
 	fmt.Println("wait")
 	wg.Wait()
 	time.Sleep(500 * time.Millisecond)
+}
+
+func ConsumerLimit() {
+	c := make(chan int, 5)
+	c <- 10
+	c <- 20
+	c <- 30
+	c <- 40
+	ctx, cancel := context.WithTimeout(context.TODO(), 2*time.Second)
+	defer cancel()
+	ticker := time.NewTicker(500 * time.Millisecond)
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-ticker.C:
+				// 按一定频率消费chan内容
+				consumeHandle(2, c)
+			case <-ctx.Done():
+				fmt.Println("time stop")
+				return
+			}
+		}
+	}()
+	wg.Wait()
+	fmt.Println("end")
+}
+
+func consumeHandle(count int, product chan int) {
+consume:
+	for i := 0; i < count; i++ {
+		select {
+		case n := <-product:
+			fmt.Println(n)
+		default:
+			fmt.Println("enough")
+			break consume
+		}
+	}
 }
