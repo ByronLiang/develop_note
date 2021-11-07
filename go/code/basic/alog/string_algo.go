@@ -108,3 +108,44 @@ func RemoveDuplicates(S string) string {
 	}
 	return string(tmp)
 }
+
+// https://leetcode-cn.com/problems/roman-to-integer/
+func RomanToInt(s string) int {
+	set := map[byte]int{
+		'I': 1,
+		'V': 5,
+		'X': 10,
+		'L': 50,
+		'C': 100,
+		'D': 500,
+		'M': 1000,
+	}
+	total := 0
+	i := 0
+	for i < len(s) {
+		c := s[i]
+		if i == len(s)-1 {
+			total += set[c]
+			break
+		}
+		n := s[i+1]
+		if (c == 'I') && (n == 'V' || n == 'X') {
+			total += set[n] - 1
+			i += 2
+			continue
+		}
+		if (c == 'X') && (n == 'L' || n == 'C') {
+			total += set[n] - 10
+			i += 2
+			continue
+		}
+		if (c == 'C') && (n == 'D' || n == 'M') {
+			total += set[n] - 100
+			i += 2
+			continue
+		}
+		total += set[c]
+		i++
+	}
+	return total
+}

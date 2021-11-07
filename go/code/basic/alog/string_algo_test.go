@@ -24,3 +24,7 @@ func TestIsMonotonic(t *testing.T) {
 func TestRemoveDuplicates(t *testing.T) {
 	t.Log(RemoveDuplicates("abbaca"))
 }
+
+func TestRomanToInt(t *testing.T) {
+	t.Log(RomanToInt("MCMXCIV"))
+}
