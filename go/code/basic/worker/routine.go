@@ -333,11 +333,11 @@ func MultiConsumerHandle() {
 }
 
 func ConsumerLimit() {
-	c := make(chan int, 5)
-	c <- 10
-	c <- 20
-	c <- 30
-	c <- 40
+	c := make(chan int, 20)
+	size := 10
+	for i := 0; i < size; i++ {
+		c <- i + 1
+	}
 	ctx, cancel := context.WithTimeout(context.TODO(), 2*time.Second)
 	defer cancel()
 	ticker := time.NewTicker(500 * time.Millisecond)
@@ -371,4 +371,30 @@ consume:
 			break consume
 		}
 	}
+}
+
+func CalChanLen() []int {
+	c := make(chan int, 20)
+	size := 10
+	queue := make([]int, size)
+	for i := 0; i < size; i++ {
+		c <- i + 1
+	}
+	close(c)
+	// 随着chan输出元素, 长度会不断变小, 导致剩余元素无法被取出
+	//for j := 0; j < len(c); j++ {
+	//	queue[j] = <-c
+	//}
+	// 将初始长度使用变量存储; len(c)是动态值，chan读取与写入会影响长度变化
+	n := len(c)
+	for j := 0; j < n; j++ {
+		queue[j] = <-c
+	}
+	// for range chan 不会因chan动态值影响元素输出
+	//i := 0
+	//for num := range c {
+	//	queue[i] = num
+	//	i++
+	//}
+	return queue
 }

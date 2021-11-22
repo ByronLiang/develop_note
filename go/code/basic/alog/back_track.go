@@ -34,6 +34,7 @@ func backtracking(nums []int, res *[][]int, tmp []int, visited []bool) {
 	// 回溯
 	for i := 0; i < len(nums); i++ {
 		if !visited[i] {
+			fmt.Println("before loop", i, tmp, visited)
 			// 做选择 进入递归-展开其他选择
 			visited[i] = true
 			tmp = append(tmp, nums[i])
@@ -113,8 +114,7 @@ var (
 		"tuv",  //8
 		"wxyz", //9
 	}
-	res   = make([]string, 0)
-	final = 0
+	res = make([]string, 0)
 )
 
 // DFS
@@ -134,7 +134,7 @@ func findCombination(digits *string, index int, s string) {
 	num := (*digits)[index]
 	letter := letterMap[num-'0']
 	for i := 0; i < len(letter); i++ {
-		findCombination(digits, index+1, s + string(letter[i]))
+		findCombination(digits, index+1, s+string(letter[i]))
 		// 由于只传形参, 无需对s进行剪枝处理
 		fmt.Println(letter[i], s)
 	}

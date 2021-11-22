@@ -33,3 +33,11 @@ sort_buffer_size参数设置内存的大小；内存大小影响所使用的排�
 1. 设置max_length_for_sort_data: 减少不必要字段返回并为满足使用单路排序算法
 
 2. 设置sort_buffer_size: 减少在排序过程中对需要排序的数据进行分段；分段会造成使用临时表来进行交换排序。
+
+## 优化与问题定位
+
+1. 使用 `explain` 语句分析 SQL 语句
+
+2. 开启慢查询日志, 定位相关查询语句; 使用内置MySQL的 `mysqldumpslow` 工具分析慢查询日志记录
+
+3. 开启 profiling; `show profiles`: 查看查询语句列表；根据指定`query ID` 查看性能分析：`show profile for query 1`
