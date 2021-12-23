@@ -24,7 +24,7 @@ func TestStringToBytes(t *testing.T) {
 func TestFormatFloatWithPre(t *testing.T) {
 	pre := 4
 	num := 23.31
-	str := fmt.Sprintf("%." + strconv.Itoa(pre) +"f", num)
+	str := fmt.Sprintf("%."+strconv.Itoa(pre)+"f", num)
 	t.Log(str)
 	t.Log(FormatFloatWithPre(num, pre))
 }

@@ -27,3 +27,15 @@ func TestRemoveNthFromEnd(t *testing.T) {
 	m := RemoveNthFromEnd(node, 1)
 	ShowListNode(m)
 }
+
+func TestReverseBetween(t *testing.T) {
+	node := InitListNode([]int{1, 2, 3, 4, 5})
+	r := ReverseBetween(node, 2, 4)
+	ShowListNode(r)
+}
+
+func TestRotateRight(t *testing.T) {
+	node := InitListNode([]int{1, 2, 3, 4, 5})
+	r := RotateRight(node, 2)
+	ShowListNode(r)
+}

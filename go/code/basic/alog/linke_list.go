@@ -265,3 +265,88 @@ func RemoveNthFromEnd(head *ListNode, n int) *ListNode {
 	current.Next = current.Next.Next
 	return currentNode.Next
 }
+
+// 92. 反转链表 II
+// https://leetcode-cn.com/problems/reverse-linked-list-ii/
+func ReverseBetween(head *ListNode, left int, right int) *ListNode {
+	newNode := &ListNode{}
+	newNode.Next = head
+	var transHead, tail *ListNode
+	current := newNode
+	for i := 1; i <= right; i++ {
+		if i == left {
+			transHead = current
+		}
+		current = current.Next
+	}
+	tail = current
+	res := reverse(transHead.Next, tail)
+	transHead.Next = res
+	return newNode.Next
+}
+
+func reverse(head, tail *ListNode) *ListNode {
+	pre := tail.Next
+	current := head
+	for pre != tail {
+		next := current.Next
+		current.Next = pre
+		pre = current
+		current = next
+	}
+	return pre
+}
+
+// 61 旋转链表
+// https://leetcode-cn.com/problems/rotate-list/
+func RotateRight(head *ListNode, k int) *ListNode {
+	total := 0
+	current := head
+	// 计算总节点数目
+	for current != nil {
+		current = current.Next
+		total++
+	}
+	if total == 0 || k == 0 {
+		return head
+	}
+	trans := k % total
+	if trans == 0 {
+		return head
+	}
+	var pre, next *ListNode
+	current = head
+	for current != nil {
+		next = current.Next
+		current.Next = pre
+		pre = current
+		current = next
+		total++
+	}
+	transNode := pre
+	// 定位翻转点
+	for i := 0; i < trans && transNode != nil; i++ {
+		transNode = transNode.Next
+	}
+	// 翻转后半部
+	var transPre, tranNext *ListNode
+	transCurrent := transNode
+	for transCurrent != nil {
+		tranNext = transCurrent.Next
+		transCurrent.Next = transPre
+		transPre = transCurrent
+		transCurrent = tranNext
+	}
+	// 翻转前半部
+	var tranFirstNext *ListNode
+	// 连接翻转后半部的连接点
+	transFirstPre := transPre
+	firstTransCurrent := pre
+	for i := 0; i < trans && firstTransCurrent != nil; i++ {
+		tranFirstNext = firstTransCurrent.Next
+		firstTransCurrent.Next = transFirstPre
+		transFirstPre = firstTransCurrent
+		firstTransCurrent = tranFirstNext
+	}
+	return transFirstPre
+}
