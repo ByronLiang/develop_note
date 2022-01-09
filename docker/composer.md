@@ -23,3 +23,31 @@ docker container prune
 # 移除空置镜像文件
 docker image prune
 ```
+
+## Docker 容器健康检测
+
+在 dockerfile 与 docker-composer 文件都有 HEALTHCHECK 标签, 可在启动时对容器进行探测, 可配置间隔时间、超时时间与重试次数
+
+一般探测可使用调用服务的ping 接口，容器内部需要安装 `curl` 命令包 或者 调用程序自带的应用
+
+MySQL 可使用自带的 `mysqladmin` 程序进行程序可用性探测: `mysqladmin ping -h localhost`
+
+```yaml
+healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+```
+
+### 服务状态 Condition
+
+对于依赖其他服务，可对所依赖的服务进行服务探测, 确保依赖服务正常, 然后再启动当前服务
+
+若对依赖服务进行 condition 选项，被依赖的服务需要加上 `healthcheck`, 从而得出探测结果
+
+```yaml
+depends_on:
+      leader:
+        condition: service_healthy
+```
