@@ -101,3 +101,17 @@ scp就是secure copy的简写; 用于在Linux下进行远程拷贝文件的命�
 
 查看文件名 并从倒数n行开始查阅
 
+### 常见统计
+
+ `grep "查询字符" 目标查询文件 | wc -l`: 统计当前文件出现查询字符的数目
+
+[awk 用法](https://www.junmajinlong.com/shell/awk/index/)
+
+ `tail -n 行数 查询文件名 | awk -F "字符串查询" '{print $2}' | awk -F '\t' '{for(i=1;i<NF;i++) if(match($i,/bfl/)) print $i}'|sort |uniq -c|sort` 
+ 
+ 对查询文件内容进行字符串查询统计命令
+
+`-F 查询字符内容` 匹配相应内容
+
+ `match($i,/bfl/)` 正则查询
+

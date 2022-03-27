@@ -25,4 +25,14 @@
 
 - 客户端获取到主机IP, 将发起TCP传输协议的Http请求，与服务器进行通信
 
+### Go SDK Http Client 域名请求都会进行 DNS 解析
 
+在业务代码里，对每个host 进行 IP 解析，并进行进程缓存, 减少每次发起请求，都进行 host 的 DNS 解析
+
+#### 一个 host 域名下多 IP 地址选取策略
+
+通过 ICMP (ping) 检测 每个 IP 的网络连通性，通过选取低时延的 IP 地址，提高请求响应效能，并做到 IP 负载均衡
+
+ICMP 协议是TCP/IP协议簇的一个子协议。可以理解归属于 `网络层`；ping 请求不依赖 TCP/UDP 进行传输。
+
+Windows 系统的tracert是用ICMP协议的 echo request（ping）探测；但Linux 系统的traceroute是用udp包进行探测
