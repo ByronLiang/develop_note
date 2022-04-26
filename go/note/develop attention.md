@@ -95,6 +95,34 @@ user := []string{"张三", "李四"}
 sort.Sort(SortByPinyin(user))
 ```
 
+### 英文字符标准化处理
+
+针对多音节英文字符，如`Pécs` 需要使用 rune 数据结构存储(32bit), 若标准化输出: `Pecs`，只需4bit存储
+
+```go
+
+import (
+	"strings"
+	"unicode"
+
+	"golang.org/x/text/runes"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
+)
+
+var normalizer = transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
+
+func normalize(str string) (string, error) {
+	s, _, err := transform.String(normalizer, str)
+	if err != nil {
+		return "", err
+	}
+	return strings.ToLower(s), err
+}
+```
+
+参考：[字符标准化](https://go.dev/blog/normalization)
+
 ## 切片应用优化
 
 - 对于可预期长度的切片初始化, 使用`temp := make([]int, 0, n)` 配置切片的容量cap长度，减少append操作, 扩容导致的旧数据拷贝
@@ -187,4 +215,20 @@ type MsgBodyEle struct {
 	Content interface{} `json:"content"`
 }
 ```
+
+## for-select-default 模式引发 CPU 空转原理 (高CPU占用)
+
+```go
+for {
+	select
+	case xx:
+	default:
+	// continue 引发 for 空转
+}
+```
+若 default 没有阻塞，则会导致不断进行 for 循环，因无法阻塞，导致长期占用 CPU
+
+`for-select` 各个分支都处于阻塞状态，程序会进行调度，使资源充分发挥作用
+
+只要default分支有一定任务运行或具有阻塞特性，则不会引发长期占用 CPU 的情况。但需要确保执行的任务，不能是for无限循环，否则也会引发 高CPU 负载的情景出现
 
