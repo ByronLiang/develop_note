@@ -44,3 +44,15 @@ func(r *Reader)Read(tar []byte) (int, error)
 3. append操作：正确预估数组的长度的话，最初分配空间做好空间规划操作，有效降低gc的压力，提升代码的效率
 
 4. 尽量做到从系统申请内存，而不是从heap里，从而减轻gc；(zero-copy 零拷贝, mmp 内存地址映射)
+
+### 对象池针对大内存对象回收
+
+若对象池的对象里含有字节切片数据结构(`[]byte`)，内存申请波动较大的数据结构，若从对象池回收大体积字节切片对象，会不断增长内存占用
+
+一般，对象池适用于固定内存对象，或者设定回收对象的最大内存值，避免回收对象是一个大内存对象。
+
+#### 案例
+
+1. 参考 `fmt` 库的 `Sprint` 方法, 使用 `sync.Pool 池话且其对象含有 []byte 结构` 对象输出重组字符内容
+
+2. 官方讨论: [add a hard limit on the maximum buffer to place back in the pool](https://golang.org/issue/23199)
