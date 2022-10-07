@@ -232,3 +232,55 @@ for {
 
 只要default分支有一定任务运行或具有阻塞特性，则不会引发长期占用 CPU 的情况。但需要确保执行的任务，不能是for无限循环，否则也会引发 高CPU 负载的情景出现
 
+## fmt.Sscanf
+
+对字符串按照格式提取内容, 并存储到指定变量里
+
+如: 
+```go
+var (
+	s string
+	n int
+)
+// 报错: unexpected EOF
+fmt.Sscanf("demo-125.txt", "%s.txt", &s)
+fmt.Sscanf("demo-125.txt", "%s-%d.txt", &s, &n) // 由于没有空格进行分隔，第一个变量获取全部字符内容
+// 成功提取: 参数125
+fmt.Sscanf("demo-125.txt", "demo-%d.txt", &n)
+// fmt.Sscanf("demo 125.txt", "%s %d.txt", &s, &n) 能成功提取 demo 字符内容与 125 数值
+```
+
+### 出现 unexpected EOF 原因
+
+若针对字符数据结构，进行解析，被提取内容默认需要以空格或制表符(\t)等方式与原文内容分离，才能正常提取
+
+主要机制: 内部对字符内容的分割原理，需要针对空格进行分割, 而机制(`fmt.Scanner`) 是个接口，只需实现接口，使其支持以不同方式进行兼容分割
+
+### 解决
+
+对字符内容的分割原理主要依赖机制(`fmt.Scanner`) 它是个接口，只需实现接口，使其支持以不同方式进行兼容分割
+
+```go
+// 声明类型 数据结构是string
+type line string
+
+// 对接口实现
+func (l *line) Scan(state fmt.ScanState, verb rune) error {
+	tok, err := state.Token(true, func(r rune) bool {
+		return r != '-' // 以"-"分隔
+	})
+	if err != nil {
+		return err
+	}
+	// 赋值操作
+	*l = line(tok)
+	return nil
+}
+
+var (
+	s line
+	n int
+)
+fmt.Sscanf("demo-125.txt", "%s-%d.txt", &s, &n) // 正常解析 s: demo
+```
+
