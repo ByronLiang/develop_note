@@ -22,6 +22,12 @@
 
 - 容器配置: `imagePullPolicy: Never` 优先使用本地镜像文件
 
+#### 更新与部署
+
+`kubectl edit pods pod名称 -n 命名空间` 变更 pod 配置并自动更新 pod
+
+`kubectl apply -f 配置.yaml` 部署配置文件
+
 #### 查看服务对外地址
 
 `minikube service -n 命名空间 list` 查看此命名空间的服务列表

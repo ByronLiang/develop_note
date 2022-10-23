@@ -216,6 +216,29 @@ type MsgBodyEle struct {
 }
 ```
 
+### 兼容与通用性好的处理方式
+
+针对同一字段动态数据结构，字段数据结构使用 `json.RawMessage` 在序列化成功后，再对此字段依据相关标识，反序列化成相应对象
+
+```go
+type MsgBodyEle struct {
+	Type string `json:"type"`
+	Content json.RawMessage `json:"content"`
+}
+
+type TextContent struct {
+	Text string `json:"text"`
+}
+
+var demo MsgBodyEle
+if demo.Type == "text" {
+	var contentText TextContent
+	// RawMessage 可转换成 json 字节, 或直接进行反序列化
+	// // 指定对Content 反序列成 文本对象
+	json.Unmarshal(demo.Content, &contentText)
+}
+```
+
 ## for-select-default 模式引发 CPU 空转原理 (高CPU占用)
 
 ```go

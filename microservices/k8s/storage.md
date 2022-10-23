@@ -24,6 +24,12 @@ lrwxrwxrwx    1 root     root            27 Mar 10  2022 dev.xx.config.yaml -> .
 
 #### 分布式存储管理驱动
 
-常见网络文件系统: NFS、Glusterfs
+常见网络文件系统: NFS、Glusterfs、cephfs 等
 
-适合容器实例从文件读取数据，但pods的副本实例分布多个节点，需要使用分布式文件管理系统，确保每个节点的挂载路径文件，文件数据一致，从而pods 读取数据能实现一致性。
+适合多个 pods 共享一份数据, 解决 hostpath 挂载宿主机, 无法跨主机节点共享数据
+
+容器实例从挂载路径读取数据，但pods的副本实例分布多个节点，需要使用分布式文件管理系统，确保每个节点的挂载路径文件，文件数据一致，从而 pods 读取数据能实现一致性。
+
+#### Glusterfs 驱动
+
+k8s 共享卷作为 NFS 的 client, 通过连接 NFS 的server, 为共享卷提供数据。其驱动主要调用 `github.com/heketi/heketi` api 库
