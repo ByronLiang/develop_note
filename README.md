@@ -46,7 +46,7 @@ Go 语言相关笔记
 
 MySQL 相关应用
 
-### [开源代码阅读记录](https://github.com/ByronLiang/develop_note/tree/master/open_source_code_review)
+### [开源代码阅读记录](https://github.com/ByronLiang/develop_note/tree/master/open_source_code_note)
 
 针对 Mattermost 平台 源码阅读记录
 
