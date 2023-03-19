@@ -20,3 +20,9 @@ db.orders.createIndex(
     { unique: true, partialFilterExpression: { status: { $gte: 2 } } }
 )
 ```
+
+### 稀疏索引
+
+在 MySQL 中使用索引的字段若有空值(null), 查询语句将无法使用此索引。
+
+MongoDB可以将字段设置间隙索引, 对索引字段为空值的文档跳过索引键，只对含有值的文档进行索引

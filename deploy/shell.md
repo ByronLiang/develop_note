@@ -207,3 +207,21 @@ $2: `被分割的右边内容`
 #### 查看 jobs
 
 `job -l`: 查看运行的后台进程
+
+#### sed 兼容
+
+[sed-command](https://stackoverflow.com/questions/4247068/sed-command-with-i-option-failing-on-mac-but-works-on-linux)
+
+`sed -i 's/old_link/new_link/g' *` 
+
+`sed -i` 不兼容 mac 系统，异常：`command expects \ followed by text`
+
+兼容 GNU and BSD 系统的 sed 写法：`sed -i'' -e 's/old_link/new_link/g' *`
+
+#### 变量大小写处理
+
+[bad-substitution](https://stackoverflow.com/questions/47815637/getting-bad-substitution-error-with-a-shell-script-on-a-mac)
+
+`${name^}`/`${name,}`: 对变量的字符串进行首字母大小写处理。
+
+`^`, `,` 和 `,,` (大写、小写) 字符处理，针对 bash 4.0 以上版本才兼容，若低版本执行，会抛出异常：`bad-substitution`

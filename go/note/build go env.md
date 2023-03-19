@@ -24,6 +24,8 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 4. 设置私有仓库镜像: `go env -w GOPRIVATE="git.xxx.xx/*"`
 
+5. GOSUMDB 环境变量主要用来校验库, 默认是 `sum.golang.org`, 若网络欠佳，每次校验库, 都需要花费时间, 替换成国内 `sum.golang.google.cn`
+
 ### 模块项目初始化
 
 1. `go mod init xxx` 对xxx模块初始化, 生成`go.mod` 包管理相关信息
@@ -31,3 +33,9 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 2. `go mod tidy` 安装缺失依赖
 
 3. `go mod clean` 移除无关依赖
+
+#### Go Module 模式下引用库的 internal 包方法
+
+若使用 GOPATH 模式, 可以使用库的 `internal` 包内方法; 
+
+若使用 GoModule 模式，若使用 `internal` 包内方法, 会报错: `use of internal package not allowed`
